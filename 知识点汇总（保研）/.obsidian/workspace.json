@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Reinforecment Learning.md",
+                "file": "FlowMatching原理理解.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Reinforecment Learning"
+              "title": "FlowMatching原理理解"
             }
           }
         ]
@@ -186,38 +186,37 @@
       "bases:新建数据库": false
     }
   },
-  "active": "72701ec463c53898",
+  "active": "3c37cb05ad0a6c9a",
   "lastOpenFiles": [
-    "imgs/Pasted image 20260808223959.png",
     "Math(快问快答版).md",
-    "imgs/Pasted image 20260808205701.png",
+    "En-oral~4489C.tmp",
+    "En-oral.pdf",
+    "Math(快问快答版).pdf",
+    "~$n-oral.docx",
+    "En-oral~0740C.tmp",
+    "imgs/Pasted image 20260812002411.png",
+    "imgs/Pasted image 20260811231645.png",
+    "imgs/Pasted image 20260811225445.png",
+    "imgs/Pasted image 20260811225137.png",
+    "imgs/Pasted image 20260811225118.png",
     "Reinforecment Learning.md",
+    "En-oral~B9447.tmp",
+    "En-oral~6DCA3.tmp",
+    "FlowMatching原理理解.md",
+    "imgs/Pasted image 20260808223959.png",
+    "imgs/Pasted image 20260808205701.png",
     "imgs/Pasted image 20260808193214.png",
     "imgs/Pasted image 20260808184952.png",
     "imgs/Pasted image 20260808181228.png",
     "MeanFlow-在Claude上的问答记录.md",
-    "FlowMatching原理理解.md",
-    "imgs/Pasted image 20260808164822.png",
-    "imgs/Pasted image 20260808160338.png",
-    "imgs/Pasted image 20260808154913.png",
-    "imgs/Pasted image 20260808154714.png",
     "estimator.md",
     "MPC&WorldModel概念辨析.md",
     "PolicyGradient理解.md",
     "ppo理解路径.pdf",
-    "imgs/Pasted image 20260807195440.png",
-    "imgs/Pasted image 20260807193139.png",
     "Math.md",
     "Reinforecment Learning.pdf",
     "具身面试题整理.md",
     "Reinforecment Learning.synctex(busy)",
-    "Reinforecment Learning.synctex.gz",
-    "Reinforecment Learning.aux",
-    "Reinforecment Learning.log",
-    "Reinforecment Learning.tex",
-    "Reinforecment Learning.html",
-    "imgs",
-    "新建文件夹",
     "欢迎.md"
   ]
 }

@@ -27,16 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "TAPO.md",
+                "file": "idea.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TAPO"
+              "title": "idea"
+            }
+          },
+          {
+            "id": "5325b9244593eab3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TPPO.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TPPO"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       },
       {
         "id": "be8a3c39a7f10ecd",
@@ -219,9 +233,11 @@
       "bases:新建数据库": false
     }
   },
-  "active": "889c4b8b9fa5d482",
+  "active": "5325b9244593eab3",
   "lastOpenFiles": [
-    "欢迎.md",
-    "TAPO.md"
+    "idea.md",
+    "TPPO.md",
+    "TAPO.md",
+    "欢迎.md"
   ]
 }

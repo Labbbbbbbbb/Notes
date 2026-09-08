@@ -588,7 +588,7 @@ SAC的连续动作空间和PPO一样都是输出均值方差用正态分布采�
 ```
 advantage = rl_utils.compute_advantage(self.gamma, self.lmbda,td_delta.cpu()).to(self.device)
 ```
-
+GAE是一个 对l步TD误差赋以指数衰减求和的算法
 
 ### offline RL
 #### BCQ，批约束下的Q-learning
