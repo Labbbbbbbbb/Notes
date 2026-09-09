@@ -195,3 +195,81 @@ GiGPO 本身已经需要状态匹配（用文本/embedding 对齐环境状态）
 ## 一句话总结
 
 **可以，但代价是稳定性。** 标准做法是 reward model 训练完冻结、critic 小 head 可训练；让 LLM judge 可训练（self-rewarding、SPIN）或兼任 critic（TPPO 的 token-level RM）都是活跃方向，但都需要额外机制（KL 约束、更新频率控制、偏好对自生成）来防止 reward hacking 和训练崩溃。2026 年的趋势反而朝另一个方向走——**用 DPO/GRPO 这类无 critic 方法，连单独的 reward model 都省掉**。
+
+
+这个问题很关键，我核实一下 GiGPO 论文里状态匹配的具体做法，不凭印象答。
+
+Good question - how does GiGPO determine "same environment state"? It can't be exact string match necessarily. Let me verify from the actual GiGPO paper rather than guessing. In ALFWorld, states are text-based observations. The natural approach: exact match of the observation text (or the admissible state representation). Let me search the paper.
+
+Good - I got the key answer. From GAGPO paper's limitation section: "In ALFWorld and WebShop, observations are textual and deterministic, so the same state can be identified via exact string matching." Also GiGPO uses group environments that share identical initial states on reset. And the Gated-BEPO paper mentions "perceptual aliasing" problem — identical observations corresponding to different underlying states.
+
+So the answer: exact string matching on text observations, enabled by the fact that these benchmark environments are (1) text-based, (2) deterministic, (3) group environments share identical initial state. Also repeated states can occur within single trajectories (back-tracking).
+
+Let me explain why this works:
+- ALFWorld: text-based TextWorld environment, deterministic. Observation text like "You arrive at sinkbasin 1. On the sinkbasin, you see a apple..." Same underlying state → identical text.
+- WebShop: deterministic observations (page content with options).
+- Group environments: verl-agent introduces "group environments" — all G rollouts in a group share identical initial states on reset(). So same task instance, same random seed → trajectories genuinely start from the same state, and when they take different paths that reconverge, the observation text is identical.
+
+Why no need for fuzzy matching: because these are deterministic text simulators. But this is also a limitation: in stochastic/visual/continuous environments, exact string match breaks down → perceptual aliasing (Gated-BEPO mentions) or sparse matches (GAGPO limitation). Follow-ups use history-aware matching (HGPO) or embedding similarity.
+
+Also mention within-trajectory repeats: agent goes back to a room it visited before → same observation text.
+
+Let me give the answer with the important nuance that this works specifically because of benchmark properties, and it's a known limitation being addressed by later work — relevant for the user's nested idea since their token-level inner layer must also do matching (prefix matching on action text, which is exact by construction).
+问得非常到位——这正是 GiGPO 成立的**前提条件**，也是它后来被后续工作指出的最大局限。答案是：**在 ALFWorld/WebShop 这两个 benchmark 里，用的是"观测文本的精确字符串匹配"（exact string matching），而且确实能做到一模一样。**
+
+## 为什么能"完全一样"：三个环境特性
+
+**1. 环境是文本的，而且是确定性的**
+
+GAGPO 论文（2026，GiGPO 的后续改进）在局限性里直接点明：
+
+> "In ALFWorld and WebShop, observations are textual and **deterministic**, so the same state can be identified via **exact string matching**."
+
+ALFWorld 基于 TextWorld，观测是固定模板生成的文本，没有随机措辞：
+
+```text
+轨迹①第5步观测:  "You arrive at sinkbasin 1. On the sinkbasin 1, you see a apple, a plate."
+轨迹③第8步观测:  "You arrive at sinkbasin 1. On the sinkbasin 1, you see a apple, a plate."
+                          ↑ 逐字符相同 → 判定为同一状态
+```
+
+环境确定性意味着：相同（物体布局 + 已执行动作历史）→ 观测文本逐字符相同。不需要 embedding 相似度、不需要模糊匹配，直接 hash 字符串就行。
+
+**2. 同组轨迹从完全相同的初始状态出发**
+
+GiGPO 的工程实现（verl-agent 框架）引入了 "**group environments**"：一组 G 条轨迹在 `reset()` 时共享**同一个初始环境**（同一场景实例、同一随机种子、同一任务配置）。所以轨迹之间是真正的"平行宇宙"——起点完全一致，只是中途动作不同。当两条轨迹绕了一圈回到同一个地点/同一个网页时，观测文本自然完全一致。
+
+**3. 重复状态在这类任务里天然高频出现**
+
+- ALFWorld：家只有十几个房间/台面，agent 反复往返，"到达 sinkbasin 1"会在多条轨迹、甚至单条轨迹内（走出去又走回来）反复出现
+- WebShop：搜索结果页、商品详情页是固定的，不同浏览路径经常汇聚到同一页面
+
+所以精确匹配虽然听起来苛刻，但在这些 benchmark 里能找到大量 anchor state，组的大小通常足够做归一化。
+
+## 但你的直觉是对的——这在一般环境里不成立
+
+这正是 GiGPO 的已知边界，2026 年的后续工作都在补这个洞：
+
+| 问题 | 说明 | 谁在解决 |
+|---|---|---|
+| **随机观测** | 环境反馈带随机措辞/随机扰动时，同一状态文本不同，精确匹配失效率高 | GAGPO 的局限声明 |
+| **感知混叠（perceptual aliasing）** | 更危险：文本相同但**底层状态不同**（同一观测文本对应不同的物品持有状态/隐藏历史），误匹配会污染分组 | Gated-BEPO 指出 |
+| **视觉/连续环境** | 图像观测无法字符串匹配 | Gated-BEPO 在视觉 Sokoban 上用图合并 |
+
+对策方向：用**完整交互历史**而不仅是当前观测做匹配（HGPO 的 history-aware matching）、建经验状态转移图（GraphGPO/Gated-BEPO）、或加置信门控（匹配到的后继太少就退回 episode 级信号）。
+
+## 对你嵌套想法的一个好消息
+
+你担心的"匹配不精确"问题在你的**内层反而不存在**：
+
+- 外层（step 级）匹配的是**环境观测**——受环境随机性影响，需要字符串/语义匹配
+- 内层（token 级）匹配的是**动作 token 序列的前缀**——这是模型自己生成的文本，"两个 token 是否相同"是**确定性的字典比较**，天然精确，没有感知混叠问题
+
+也就是说，在 anchor state 已对齐的小组内建动作前缀树时，分叉点匹配是 100% 可靠的；你的内层只继承外层 anchor 匹配的误差，不引入新的匹配误差。
+
+一句话：**GiGPO 靠"文本 + 确定性 + 同初始状态"三个 benchmark 特性用精确字符串匹配判定状态相同；这在 ALFWorld/WebShop 里成立且高频，但在随机/视觉/部分可观测环境里会失效——这既是它的局限，也是 2026 年后续工作（HGPO/GAGPO/Gated-BEPO）的改进点。**
+
+Sources:
+- [GiGPO: Group-in-Group Policy Optimization (arXiv:2505.10978)](https://arxiv.org/html/2505.10978v1)
+- [GAGPO (arXiv:2605.13217) — exact state matching 局限讨论](https://arxiv.org/html/2605.13217v1)
+- [Gated-BEPO (arXiv:2608.06861) — perceptual aliasing 讨论](https://arxiv.org/pdf/2608.06861)
