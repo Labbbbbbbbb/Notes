@@ -273,3 +273,28 @@ Sources:
 - [GiGPO: Group-in-Group Policy Optimization (arXiv:2505.10978)](https://arxiv.org/html/2505.10978v1)
 - [GAGPO (arXiv:2605.13217) — exact state matching 局限讨论](https://arxiv.org/html/2605.13217v1)
 - [Gated-BEPO (arXiv:2608.06861) — perceptual aliasing 讨论](https://arxiv.org/pdf/2608.06861)
+
+
+## 已经开始拥挤、不建议正面进入的方向
+
+- **反事实 rollout 信用分配**：半年内至少四篇（CCPO、C3 "Exact is Easier"、COSAC、CVT-RL），其中 [CVT-RL](https://arxiv.org/html/2606.05263) 已经做了"对 agent 步骤做删除/替换/工具输出扰动干预 + 双重稳健估计 + 反作弊"，基本把反事实这条路在 agent 上走完了；
+- **经验回放/off-policy GRPO**：ExGRPO（ICLR'26）、BAPO（ICLR'26）、[advantage-prioritized replay](https://arxiv.org/html/2606.04560v2) 已经三篇，但都做单轮推理；
+- **熵调度/熵正则**：李林静老师组自己的 ACL'26 Entropy Scheduling 占了；
+- **失败样本挖掘**：TAPO（在线 token 级）+ BCPG-NSA（离线 step 级）两面夹好了；
+- **PRM/过程奖励标注**：组内 "Beyond the First Error" + 一片 PRM 文献，红海中的红海。
+
+## 仍有空白的创新点（按性价比排序）
+
+### 1. 共享前缀树式分组：把"组"从平铺改成树（推荐）
+
+GRPO 的组是 G 条互相独立的完整轨迹，但 agent rollout 天然会长在一棵树上——同组轨迹在前 t 轮往往共享环境交互，到某个决策点才分叉。现状是**重复的环境交互（最贵的部分）被重放了 G 次，且分叉点之前的 token 白白损失了"同前缀比较"这个最低方差的基线**。
+
+可做的事：在分叉点构建子树，用**子树内相对优势**（同一状态之后各分支的终局差异）作为该决策点的信用——这其实是 GiGPO 锚状态的"在线主动构造版"：GiGPO 靠运气在 G 条独立轨迹里回溯匹配重复状态，匹配率随动作空间增大而暴跌；树式 rollout 保证每个分叉点都有对照组，还顺带摊薄了环境交互成本（rollout 是 agent RL 80%+ 的预算）。和 replay 流的区别：replay 复用的是**旧策略的整条轨迹**，你复用的是**当前组的公共前缀**，无 staleness 问题。这个方向兼具算法贡献（子树基线估计器）和系统贡献（交互复用），故事完整。
+
+### 2. 动作类型结构化信用（上次嵌套方案的"单层"版）
+
+放弃双层，直接利用 agent 输出的**结构性**：一条输出里 `thinking`（自由文本）和 `action`（tool call、检索词、最终答案）是可解析的两类 token。设计 action-aware 的优势分配：action token 承载主要信用、thinking token 只受弱调制；不同动作类型（检索类、状态改变类、提交类）用不同的 KL/裁剪系数。这比 TAPO 的熵加权更有因果依据（熵高 ≠ 关键），比 BCPG-NSA 的 step 内广播更细，且**零额外模型、零额外标注**，符合 Dr.GRPO 之后"少即是多"的审美。风险点：需要证明 thinking token 确实不该拿强信号（oracle 实验，见上次建议）。
+
+### 3. 超长轨迹 RL：上下文装不下一条轨迹怎么办（工程+理论的真空地带）
+
+Agent 轨迹 100k–1M token、上百轮，**单条轨迹已经超过训练上下文窗口**——现有工作（TAPO/GiGPO）在 ALFWorld 这种 50 步内的环境里实验，回避了这个问题。一旦上真实 web/computer-use 环境，chunked 训练必然引入问题：跨 chunk 的 token 概率比怎么算？截断边界的优势估计偏差有多大？用摘要状态 vs. 回放前缀的 trade-off？这是个"问题定义本身就是贡献"的方向：**截断下的信用分配**，把 GAE/组优势在分段边界处做无偏修正。风险：工程量大、需要长程环境；但占位价值高，且和组里 WebReal（DeepSearch 真实任务）的资源天然契合。

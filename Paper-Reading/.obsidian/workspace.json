@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "TPPO.md",
+                "file": "idea.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TPPO"
+              "title": "idea"
             }
           }
         ],
@@ -235,8 +235,8 @@
   },
   "active": "5325b9244593eab3",
   "lastOpenFiles": [
-    "idea.md",
     "TPPO.md",
+    "idea.md",
     "TAPO.md",
     "欢迎.md"
   ]
