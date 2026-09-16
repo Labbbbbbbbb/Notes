@@ -298,3 +298,96 @@ GRPO 的组是 G 条互相独立的完整轨迹，但 agent rollout 天然会长
 ### 3. 超长轨迹 RL：上下文装不下一条轨迹怎么办（工程+理论的真空地带）
 
 Agent 轨迹 100k–1M token、上百轮，**单条轨迹已经超过训练上下文窗口**——现有工作（TAPO/GiGPO）在 ALFWorld 这种 50 步内的环境里实验，回避了这个问题。一旦上真实 web/computer-use 环境，chunked 训练必然引入问题：跨 chunk 的 token 概率比怎么算？截断边界的优势估计偏差有多大？用摘要状态 vs. 回放前缀的 trade-off？这是个"问题定义本身就是贡献"的方向：**截断下的信用分配**，把 GAE/组优势在分段边界处做无偏修正。风险：工程量大、需要长程环境；但占位价值高，且和组里 WebReal（DeepSearch 真实任务）的资源天然契合。
+
+
+
+在给方案前，我先快速查一下 2026 年是否已经有"step 树 × token 树"嵌套的工作撞车。
+
+检索确认了一个好消息：**"step 轴 × token 轴正交嵌套"这个精确组合还没人做**。最近的 T-STAR（[arXiv:2604.07165](https://arxiv.org/abs/2604.07165)，2026.04）把轨迹合并成认知树、在关键分叉**步**上做 surgical loss，但信用仍止步于 step 粒度；TCPO 是 turn-level；StepCodeReasoner 的 Bi-Level GRPO 是"步奖励 + 步内塑形"但依赖执行 trace 锚点且不下沉到 token。下面给你一个可落地的具体方案。
+
+---
+
+## 选题一句话
+
+**在多轮智能体的同一环境状态锚点组内，同时做跨轨迹的 step 级相对比较（GiGPO 轴）和组内 token trie 的分叉 TD 信用（TEMPO 轴），两个轴独立估计、正交叠加、各自可降级，无需 critic、judge 或额外 rollout。**
+
+## 为什么 GiGPO+TEMPO 不是简单拼接，而是有一个必须解决的技术关键
+
+直接把 TEMPO 套到 agent 轨迹上会失败：agent 轨迹每步带不同的 observation，两条轨迹的 token 前缀在第一轮环境观测之后就 diverge，token trie 退化成 G 条独立链，没有任何分叉。
+
+**关键洞察：token trie 不能建在整条轨迹上，只能"局部地"建在锚点组内——锚点组内的兄弟响应共享完全相同的 observation 前缀（环境状态逐字节相同），从这个共同根节点之后，模型各自生成 thinking + action，恰好构成一棵天然的 token trie。**
+
+于是结构是嵌套的两棵树：
+- **外层树（step 轴）**：节点 = 环境状态，兄弟边 = 同一状态下采取的不同动作（GiGPO 式被动锚点，或 Tree-GRPO 式主动分叉）；
+- **内层 trie（token 轴）**：挂在每个锚点上，根 = 共享 observation，叶 = 组内各条响应，按 token id 精确合并。
+
+## 方法流程（4 步，建议命名 NEST-GRPO）
+
+**Step 1：锚点组构造（复用 GiGPO，零新机制）**
+同一任务的 G 条轨迹中回溯匹配相同环境状态 $s$，组内响应 $\{o_1,\dots,o_k\}$ 构成兄弟组。
+
+**Step 2：外层 step 级优势 $A^{step}$（GiGPO micro advantage）**
+兄弟动作的 step-to-go 回报相对归一化——但建议把叶回报从"终局 0/1"升级为外层树反向传播的回报均值，降方差。
+
+**Step 3：内层 token trie 的分叉 TD $\delta^{tok}$（TEMPO 的局部化改造）**
+在锚点组内对响应部分建 token trie，非参数前缀价值：
+
+$$V(p)=\frac{1}{|L(p)|}\sum_{o_j\succ p} G_j,\qquad \delta_t = V(p+c_t)-V(p)$$
+
+其中 $G_j$ 用 Step 2 的 step-to-go 回报（而不是仅终局奖励）。非分叉 token 的 $\delta_t=0$。
+
+这一层有一个免费的因果过滤性质，建议作为论文的核心发现来写：**thinking 里的措辞分叉如果最终收敛到相同动作/相同后续结果，$V$ 的两个子树均值近似相等，TD 自动归零；只有真正改变了动作选择的 token（以及 action arguments 里的决策 token）才拿到非零信用。** 不需要 action parser、不需要第二个 judge——环境结果替你区分了"有用思考"和"废话思考"，比 TAPO 的熵代理和纯 action-span mask 都更有因果依据。
+
+**Step 4：正交组合**
+
+$$A_{i,t}=\underbrace{\tilde r_i}_{\text{GRPO 铺底}}+\alpha\underbrace{A^{step}_{i}}_{\text{step 轴：组内广播到该步全部 token}}+\beta\underbrace{\delta^{tok}_{i,t}\cdot\mathbf{1}[t\in\text{anchor step}]}_{\text{token 轴：仅锚点步、仅分叉 token}}$$
+
+三个项各自可置零并严格退化：全关 = GRPO；只开 α = GiGPO；只开 β = "单锚点 TEMPO"；都开 = 你的方法。这个 2×2 消融就是"正交性"最直接的实验证据。
+
+## 与最接近工作的差异（投稿时的 related work 表）
+
+| | step 级相对比较 | step 内 token 信用 | token 信号来源 | 额外成本 |
+|---|---|---|---|---|
+| GRPO | ✗ | ✗ | — | 零 |
+| GiGPO | ✓（锚状态） | ✗，步内广播 | — | 零 |
+| TEMPO | ✗（单轮） | ✓（分叉 TD） | 全轨迹 trie（agent 上退化） | 零 |
+| Tree-GRPO | ✓（主动分叉） | ✗，步内广播 | — | 部分额外 rollout |
+| T-STAR | ✓（认知树+surgical loss） | ✗，停在 divergence **step** | — | 零 |
+| TAPO | ✗ | ✓但无结构、熵启发式 | 熵权重 | 零 |
+| BCPG-NSA | ✗（二值标签） | 伪 token（step 常数广播） | LLM+PRM 标注 | 标注贵 |
+| **本工作** | **✓** | **✓，锚点内 trie 分叉 TD** | **环境结果，无 judge** | **零（被动版）** |
+
+## 实验设计建议
+
+- **环境**：ALFWorld、WebShop（对齐 GiGPO/T-STAR 主表）+ 一个 search QA 集（NQ/HotpotQA）+ 最好加一个带写动作的环境（如 AppWorld）显示主动分叉/环境 fork 讨论；
+- **基线**：GRPO、Dr.GRPO、GiGPO、TAPO、Tree-GRPO、T-STAR，以及一个强消融"action-mask 加权"（证明 trie TD 比结构 mask 细——它能奖励 pivotal thinking）；
+- **核心消融（正交 2×2）**：α/β 四格 + 用终局奖励 vs step-to-go 回报做内层叶值；
+- **诊断实验（决定论文上限）**：
+  1. 统计锚点组内 token 分叉的位置分布：多少 TD 质量落在 action arguments、多少落在 thinking——如果 thinking 上的非零 TD 与后续 action 改变强相关，因果过滤的故事就成立；
+  2. Oracle 实验：人工标注决策 token，看 token 轴的理论上限；
+  3. 小样本锚点（兄弟数 k=2）的 TD 噪声分析，给一个最小 k 或收缩到组均值的正则；
+  4. 开销：内层 trie 构建是纯 CPU 后处理，报告相对 GiGPO 的训练时增幅（应 <3%）。
+
+## 风险与边界控制
+
+1. **锚点稀疏时 token 轴无信号**——这是优雅降级而非缺陷（退化为 GiGPO），但要在论文里量化锚点覆盖率随任务难度的变化；主动分叉版（在低覆盖锚点上补采 k 条续写）可作为论文后半部分的效率章节，别和主方法捆死；
+2. **thinking 分叉的 TD 可能是相关而非因果**（同一个潜在意图的两种表达）——措辞上用"预测性/条件信用"而非"因果信用"，审稿人抓不住把柄；
+3. 控制野心：主方法只做**被动锚点 + 零额外模型**，off-policy 修正、写动作环境 fork 都放 future work，一篇文章一个核心思想（"锚点内的 token trie 让两层信用正交可加"）。
+
+## 题目参考
+
+**方法名优先（会议风，推荐）：**
+1. **NEST-GRPO: Orthogonal Step-and-Token Credit Assignment for Multi-Turn LLM Agent RL**（Nested Estimation of Step-Token advantages）
+2. **ST-GRPO: Step Groups Meet Token Tries — Nested Credit Assignment for LLM Agents**
+3. **OATS: Orthogonal Advantage from Tree-Steps and Token Forks for Agent Policy Optimization**
+
+**机制描述风（期刊/CL 风）：**
+4. *Credit at the Right Fork: Nested Step-and-Token Credit Assignment for Multi-Turn LLM Agents*
+5. *Steps Group, Tokens Fork: Critic-Free Hierarchical Credit Assignment for LLM Agent RL*
+
+**意象风（TEMPO 那句象棋格言证明好用）：**
+6. *Two Trees for One Decision: Step-Level Grouping and Token-Level Branching in Agent Policy Optimization*
+
+我个人最推荐 **1 或 4**：方法名 NEST-GRPO 直接传达"嵌套"且挂靠 GRPO 谱系，便于传播；副标题用 Orthogonal 强调与 GiGPO/TEMPO 的关系。如果想更突出"零额外成本的因果过滤"这一卖点，选 4。
+
+需要的话，下一步我可以帮你把 Step 3–4 的优势估计写成带无偏性分析的形式化推导（参照 GiGPO 附录 B 的 unbiasedness 证明格式），那是这篇文章理论部分的立身之本。
