@@ -391,3 +391,115 @@ $$A_{i,t}=\underbrace{\tilde r_i}_{\text{GRPO 铺底}}+\alpha\underbrace{A^{step
 我个人最推荐 **1 或 4**：方法名 NEST-GRPO 直接传达"嵌套"且挂靠 GRPO 谱系，便于传播；副标题用 Orthogonal 强调与 GiGPO/TEMPO 的关系。如果想更突出"零额外成本的因果过滤"这一卖点，选 4。
 
 需要的话，下一步我可以帮你把 Step 3–4 的优势估计写成带无偏性分析的形式化推导（参照 GiGPO 附录 B 的 unbiasedness 证明格式），那是这篇文章理论部分的立身之本。
+
+
+
+
+
+
+
+用户问 NEST 标题中的 "Nested" 方式是否有明确要求——即论文里要怎么实现才配得上 "nested" 这个词。这是个概念性问题，直接回答即可。
+
+关键点：标题里用了 "Nested"，审稿人会期待看到什么结构？nested 在这里意味着 step advantage 是外层、token weight 是内层的层级结构，而不是两个平级项相加。需要讲清楚：
+1. nested 对实现的具体约束（层级、计算顺序、归一化范围）
+2. 哪些实现算 nested，哪些不算
+3. 这和之前提的乘法调制的关系
+4. 风险：如果实际实现是平级的，标题就名不副实
+# "Nested" 对实现方式有明确约束——不能随便用
+
+标题里写了 "Nested"，审稿人就会期待看到**真正的层级嵌套结构**，而不是两个平级修正的简单拼接。具体有三个层次的要求：
+
+---
+
+## 要求 1：必须是"外层 step、内层 token"的两级结构，计算有先后
+
+### 符合 nested 的计算顺序
+
+```
+轨迹 reward R
+    │
+    ▼
+【外层】先在 anchor state group 内算 step 级优势
+    A_step_{i,k} = (R_i - mean_group_k) / std_group_k
+    │
+    ▼  （A_step 作为条件/基准传入内层）
+【内层】再在 step k 内部算 token 级权重
+    w_token_{i,t} = f(entropy_{i,t} | t ∈ step k)
+    │
+    ▼
+最终 A_{i,t} = A_step_{i,k(t)} · w_token_{i,t}
+```
+
+**关键**：token 级修正的计算**依赖** step 级的输出或分组结构，两层有明确的从属关系。
+
+### 不符合 nested 的写法（平级拼接）
+
+$$
+A_{i,t} = A^{step}_{i,k} + \lambda \cdot A^{token}_{i,t}
+$$
+
+如果 $A^{token}$ 是在**整条轨迹**范围内独立算的（比如 GTPO 的跨序列同位置熵归一化），和 step 分组毫无关系，那这是"**并列组合**（parallel composition）"，不是 nested——标题用 nested 就名不副实。
+
+---
+
+## 要求 2：内层归一化的作用域必须在 step 内
+
+这是判断"真 nested"还是"假 nested"的试金石：
+
+| 设计 | token 权重的归一化范围 | 是否 nested |
+|------|---------------------|------------|
+| 在**同一个 step / anchor group 内**对 token entropy 归一化 | 局部（step 内） | ✓ 真 nested |
+| 在**整条轨迹**内对 token entropy 归一化 | 全局（轨迹内） | ✗ 只是叠加 |
+| 跨序列同推理位置归一化（GTPO 原始做法） | 全局（batch 内） | ✗ 只是叠加 |
+
+直觉上 nested 的含义是：**"这一步内，哪些 token 是关键决策点"**——所以"哪些"的参照物必须是同一步内的其他 token，而不是全轨迹。
+
+---
+
+## 要求 3：层级结构最好体现在数据组织上
+
+如果上完整版（你原始 idea 的嵌套前缀树），nested 体现在：
+
+```
+trajectory
+└── anchor state group（GiGPO 外层分组）
+    └── step 内的 token 节点（内层前缀树/熵排序）
+```
+
+外层按"重复环境状态"分组，内层在组内按 token 熵筛选——**数据结构本身就是嵌套的**，这是最硬的 nested 证据。
+
+---
+
+## 对你 pilot study 的具体影响
+
+你设计的 4 组实验里，E3 要配得上 "Nested"，token 权重必须这样算：
+
+1. 先用 GiGPO 找到 anchor state group
+2. **在每个 anchor group 内部**，对该组样本同位置 token 的熵做归一化得到 $w$
+3. 用乘法 $A_{step} \cdot w$ 组合
+
+而不能直接把 TAPO 的全轨迹熵阈值 filter 原样搬过来——那样 E3 只是 "GiGPO + TAPO 同时开"，是 parallel composition，论文里就不能叫 nested，只能叫 composing（这也是为什么副标题用 composing 是安全的，但主标题 NEST 对 E3 的实现提出了更强要求）。
+
+---
+
+## 两种应对策略
+
+### 策略 A：让实现真正 nested（推荐）
+
+E3 用 step/anchor-group 内局部熵归一化，标题和实现一致。
+
+**额外好处**：这本身就是一个小创新点——"把 GTPO 的全局熵归一化改为 anchor-group 内局部归一化"，消融时还能多一组对比（全局 vs 局部归一化）。
+
+### 策略 B：保留标题但弱化 nested 的强度
+
+如果 pilot 发现局部归一化信号不稳，退回全局组合，那主标题要改：
+
+> ~~NEST: Nested Estimation...~~ → **Composing Step and Token Credit Assignment...**（放弃缩写）
+
+副标题 "composing granularities" 对两种实现都成立，但主标题的 NEST 只在真 nested 时成立。
+
+---
+
+## 一句话总结
+
+"Nested" 有明确要求：**token 级修正必须在 step/anchor group 的局部作用域内计算、依赖外层分组结果、与 step advantage 形成从属层级（乘法调制）**；如果两个修正在各自全局范围独立计算后相加，那只是平级组合（composing），配不上 nested。pilot 的 E3 建议直接实现 anchor-group 内局部熵归一化，既名副其实又顺带产生一个消融点。
