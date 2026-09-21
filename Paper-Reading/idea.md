@@ -503,3 +503,4 @@ E3 用 step/anchor-group 内局部熵归一化，标题和实现一致。
 ## 一句话总结
 
 "Nested" 有明确要求：**token 级修正必须在 step/anchor group 的局部作用域内计算、依赖外层分组结果、与 step advantage 形成从属层级（乘法调制）**；如果两个修正在各自全局范围独立计算后相加，那只是平级组合（composing），配不上 nested。pilot 的 E3 建议直接实现 anchor-group 内局部熵归一化，既名副其实又顺带产生一个消融点。
+
