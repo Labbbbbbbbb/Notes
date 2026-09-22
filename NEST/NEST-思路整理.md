@@ -14,16 +14,28 @@
 衡量Step-level的优势能否区分成败轨迹:
 $$
 
-\Delta _{ A_ {\text{step}}} = \mathbb{E}[A^{\text{step}} \mid \text{ Success }] - \mathbb{E}[A^{\text{step}} \mid \text{ Failure }]
+\Delta _{ A_ {\text{step}}} = \frac{\mathbb{E}[A^{\text{step}} \mid \text{ Success }] - \mathbb{E}[A^{\text{step}} \mid \text{ Failure }]}{\mathbb{E}[A^{\text{step}} \mid \text{ Success }] + \mathbb{E}[A^{\text{step}} \mid \text{ Failure }]}
 
 $$
-衡量Token-level的区分是有益还是冗余:
+衡量Token-level的区分是有益还是冗余: （其中$A_i$是第i步的优势，$A_{i,t}$是第t个token的优势。
 $$
 D_i = \frac{ 1 }{T_i} \sum_{t= 1 }^{T_i} \frac{| A_{i,t} - A_i |}{| A_i | + \epsilon}
 $$
+
+**注意：** 这一点的数值要求（要求两个区分度分别大于xxx）其实只是统计意义上的指标，只能说明数据质量而不能说明训练出来的模型质量，但是这个指标是由我们设计出的算法计算出的，并且最后直接作为策略的梯度，因此对这个指标进行要求可以算是对实验原理的要求。但是要注意一个问题是Advantage是有正负的，相比之下价值V一般没有符号区别，因此定指标时要搞清楚其意义时价值还是优势
+。。但是总觉得有点颠倒啊，应该是算出来的梯度是正是负来决定动作概率是增加还是减少，而不应该是预设一个”好“/”坏“的token或者step来要求它的梯度啊，本来就是一个统计意义的......
+
+遂把这一点改成---->
+（2）两个粒度的消融实验，为说明该粒度的优势估计有意义，去掉其中一层的信息后，其成功率应降低5%以上。
+
 （3）两个粒度的置换实验，打乱其中一个粒度的优势估计，分析其成功率的变化，若成功率明显降低，说明该粒度的优势估计有意义，否则说明冗余。
 
 
+。。等等等等。先想清楚这个优势估计如何”嵌套“，是需要为每个step和token分别有一个计算优势的式子，还是说想TEMPO那样，是两个优势加和（或者乘积之类的）？policy本身是用于生成token的，这样子的话似乎所有优势最终都需要汇总成token的梯度，单单说step的优势是没有落点的。除非在agent中另外训练一个专门预测step的特征向量（representation），把这个向量作为一个生成step中的每一个token的条件，这样子的话才有可能真的去估计step的优势同时它真的能作为一个梯度去优化某个东西。我觉得这是一个很有价值的想法（吗），至少它真的符合嵌套的思想。
+![[Pasted image 20260921222410.png]]
+看一下这两篇的想法
+ ① CREST（[arXiv:2608.13179](https://arxiv.org/abs/2608.13179) ，2026.08）——Agent 场景，两层嵌套
+ ② SHAPE（[arXiv:2604.06636](https://arxiv.org/html/2604.06636v1) ，华为/北大，2026.04）——单轮推理，两段式
 ## ToDo
 
 1.跑一下VeRL，熟悉一下WebShop和ALFWorld，做最小可行性验证
