@@ -35,10 +35,19 @@ $$
 ![[Pasted image 20260921222410.png]]
 看一下这两篇的想法
  ① CREST（[arXiv:2608.13179](https://arxiv.org/abs/2608.13179) ，2026.08）——Agent 场景，两层嵌套
+ **"CREST 的方法在具备 per-turn verifier 的场景下是有效的，但大量真实 agent 环境不提供 per-turn 标注，本工作(NEST)解决的是这个场景下的信用分配"**。
+ 同时尽管拿teacher来当magnitude的方法有效避免了错误方向和reward hacking，但是一个turn失败就代表所有token均应该背离teacher的做法，也不尽合理，P1 性质 sign(At​)=sign(Aturn) 既是它的安全保证，也是它的表达力上限。
  ② SHAPE（[arXiv:2604.06636](https://arxiv.org/html/2604.06636v1) ，华为/北大，2026.04）——单轮推理，两段式
 ## ToDo
 
 1.跑一下VeRL，熟悉一下WebShop和ALFWorld，做最小可行性验证
+2.整理参考文献的benchmark和所用模型大小、训练框架，包括GiGPO、TEMPO、DAPO、HEPO、TAPO、OPD、OPSD、CREST、有时间的话包括RLHF、RLVR等
 
 ## 想法随写
 tips1：TEMPO和TAPO对token-level的区分虽然方法不同但是是存在一些关系的，TAPO的Shannon熵正式确定性不高的toekn，而正是在这样的token上会产生较多分支，两种方法最后都在让模型重点更新不确定的token点并使其往高advantage的方向走
+
+tips2：‘training-time methods that respect the turn structure of multi-turn sessions.’这个概念很有意思，出现在CREST的related work，感觉有点像multi-turn OPD
+
+tips3：More recently, hybrid methods attempt to combine RL’s verifier-bounded direction with distillation’s dense signal: SDAR (Lu et al., 2026b) gates self-distillation as an auxiliary loss alongside RL（我感觉CREST的related work好多可以学的地方、、）
+## 构想
+1.开题意义部分，可以参考一下CREST，写一下RLVR

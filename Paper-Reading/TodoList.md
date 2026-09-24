@@ -11,7 +11,7 @@ Tree-OPO Huang et al. (2025) leverages off-policy teacher MCTS to build prefix t
 
 
 [Qwen3 Technical Report](https://arxiv.org/html/2505.09388.pdf#abstract1) ....呃？（重点看一下post-training部分）
-OPD
+OPD、OPSD
 RSI
 MoE
 Q:目前的post-training算法大都只取模型的输出而不细究模型是dense/MoE架构，有没有一种后训练方法会针对MoE的路由来进一步分配奖励呢？
