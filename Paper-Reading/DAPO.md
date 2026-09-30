@@ -1,0 +1,1 @@
+**放宽 ratio 上界并不会让 top token 更自信——概率上限决定了 pold​>0.78 的 token 根本够不到新上界;它只解放了 fork 处的中低概率挑战分支,让它们在正 advantage 时能足量吸收"错误现任分支"释放的概率质量、在未来 rollout 中存活并形成持续竞争。局部看是推高一个 token(熵↓),全局看是保住 fork 的多峰结构(熵不塌缩)——这就是"clip-higher promotes entropy"的真正含义。**

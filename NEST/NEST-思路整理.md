@@ -42,6 +42,7 @@ $$
 
 1.跑一下VeRL，熟悉一下WebShop和ALFWorld，做最小可行性验证
 2.整理参考文献的benchmark和所用模型大小、训练框架，包括GiGPO、TEMPO、DAPO、HEPO、TAPO、OPD、OPSD、CREST、有时间的话包括RLHF、RLVR等
+这个整理包括方法本身是agentic RL还是reasoning RL 、benchmark给出的是什么粒度的reward（traj or step）
 
 ## 想法随写
 tips1：TEMPO和TAPO对token-level的区分虽然方法不同但是是存在一些关系的，TAPO的Shannon熵正式确定性不高的toekn，而正是在这样的token上会产生较多分支，两种方法最后都在让模型重点更新不确定的token点并使其往高advantage的方向走
@@ -49,5 +50,36 @@ tips1：TEMPO和TAPO对token-level的区分虽然方法不同但是是存在一�
 tips2：‘training-time methods that respect the turn structure of multi-turn sessions.’这个概念很有意思，出现在CREST的related work，感觉有点像multi-turn OPD
 
 tips3：More recently, hybrid methods attempt to combine RL’s verifier-bounded direction with distillation’s dense signal: SDAR (Lu et al., 2026b) gates self-distillation as an auxiliary loss alongside RL（我感觉CREST的related work好多可以学的地方、、）
+
+tips4：HEPO主要是研究RLVR关于熵的动力学，指出只给高熵token梯度可以抑制熵坍缩和探索坍缩，这方面似乎和DAPO的机制有异曲同工之处，可以进一步思考下。于与此同时还有SFT和RL阶段对于熵的处理不同导致的“SFT死记但RL能泛化”，也可以体会一下。基于熵和基于概率的筛选思想有所不同，具体可以看一下Relative Surprisal Index。
+
+tips5：如果说高熵掩膜是为了防止低熵token倾向于坍缩（例如90%的可能采样到一个token并且它是好的，就会无限继续提高它的可能性，鉴于低熵本就是由已有的语言知识习得的，这是大概率的事情），那么是不是熵作为门控而非乘在advantage上可以更好地防止熵快速坍塌？
+![[Pasted image 20260929020314.png]]
+
+tips6:Clip-higher 放宽正 advantage token 的 ratio 上界,难道不是鼓励正确的top-k变得更自信，难道不是会让熵更容易变小吗
+针对这个疑惑的关键事实是**放宽的上界对 top token 根本不可达**
+![[Pasted image 20260929015430.png]]
+group 内正 advantage 落在"挑战分支"上,不是落在 top token 上，因此DAPO鼓励高熵选择中的低概率token概率变高，倾向于更高熵地探索
 ## 构想
 1.开题意义部分，可以参考一下CREST，写一下RLVR
+
+**从entropy的视角看---token级熵掩膜的原因**
+“This balance is especially fragile in RLVR for large models. When entropy is too low, the policy converges prematurely to suboptimal behaviors (entropy collapse); when it is too high, uncontrolled stochasticity attenuates learning signals (entropy explosion). Navigating this entropy dilemma is therefore pivotal for scaling RLVR.”
+DAPO通过clip-higher来避免entropy collapse，HEPO则通过截断低熵token的梯度来避免entropy collapse；QAE看到了entropy collapse和explosion两端的弊病，通过将GRPO优势构造中减去的中位数换成k-percentile，从而避免稀疏奖励中大量的negative advantage造成entropy explosion，并且可以使得大部分token的优势为0（咋做到的）。
+以上的三种方法（DAPO、HEPO、QAE）都是单轮的reasoning RL，其中后两者都在AIME24/25上进行了测试，可以借助is_equivalent函数高效判断出是否获得奖励
+
+**从别的视角看---alternative token-level indicators**
+Do not let lowprobability tokens over-dominate in rl for llms. In 2nd AI for Math Workshop@ ICML, 2025.
+用RSI指标来进行token-level筛选
+[4] Xingwu Chen, Tianle Li, and Difan Zou. Reshaping reasoning in llms: A theoretical analysis of rl training dynamics through pattern selection. arXiv preprint arXiv:2506.04695, 2025.
+[9] Maggie Huan, Yuetai Li, Tuney Zheng, Xiaoyu Xu, Seungone Kim, Minxin Du, Radha Poovendran, Graham Neubig, and Xiang Yue. Does math reasoning improve general llm capabilities? understanding transferability of llm reasoning. arXiv preprint arXiv:2507.00432, 2025.
+
+**Recalibrating token contributions--调整权重**
+（简单搜一下讲了什么就好）
+[3] Minghan Chen, Guikun Chen, Wenguan Wang, and Yi Yang. Seed-grpo: Semantic entropy enhanced grpo for uncertainty-aware policy optimization. arXiv preprint arXiv:2505.12346, 2025.
+[33] Xingjian Zhang, Siwei Wen, Wenjun Wu, and Lei Huang. Edge-grpo: Entropy-driven grpo with guided error correction for advantage diversity. arXiv preprint arXiv:2507.21848, 2025.
+[23] Shumin Wang, Yuexiang Xie, Wenhao Zhang, Yuchang Sun, Yanxi Chen, Yaliang Li, and Yanyong Zhang. On the entropy dynamics in reinforcement fine-tuning of large language models. arXiv preprint arXiv:2602.03392, 2026.
+⁨[30] Jiarui Yao, Ruida Wang, et al. Future-kl regularized grpo: Process-level credit assignment from f-divergence regularization. arXiv preprint arXiv:2601.10201, 2026.
+
+**On-Policy Distillation**
+benchmark为XSum（输入文章生成摘要），WMT（英德语翻译）,GSM8K（小学数学CoT推理看），其实本身是一个知识蒸馏（KD）的优化算法，不直接属于RLVR
