@@ -82,4 +82,34 @@ Do not let lowprobability tokens over-dominate in rl for llms. In 2nd AI for Mat
 ⁨[30] Jiarui Yao, Ruida Wang, et al. Future-kl regularized grpo: Process-level credit assignment from f-divergence regularization. arXiv preprint arXiv:2601.10201, 2026.
 
 **On-Policy Distillation**
-benchmark为XSum（输入文章生成摘要），WMT（英德语翻译）,GSM8K（小学数学CoT推理看），其实本身是一个知识蒸馏（KD）的优化算法，不直接属于RLVR
+benchmark为XSum（输入文章生成摘要），WMT（英德语翻译）,GSM8K（小学数学CoT推理看），其实本身是一个知识蒸馏（KD）的优化算法，不直接属于RLVR，但是值得注意的是这个on-policy的范式让它可以丝滑地与RLVR相结合，并且文中给出了融合RL奖励与KL散度的优化目标
+
+
+**LLM Agent相关工作**
+TAPO
+TPPO？是agent吗
+GiGPO
+TEMPO
+GRPO和它的varient
+
+
+GLAM和TWOSOME：预设动作集（而不是生成任意自然语言token来和任务做语义匹配），然后用RL进行优化。每一条轨迹由简单的`turn left、turn right、go forward、pick up、drop、toggle`构成，优化的粒度是action级，而非token/trajectory level。action的优势基于critic计算给出，而action的概率由每个token生成概率的乘积得到
+
+POAD：（可以去看一下POAD那章的小结），在上面两篇工作的基础上不再预设动作集（anyway，似乎这个action的长度还是明显较短的），并且进行了token粒度的creadit assignment，探究了稀疏奖励分配中衰减系数应如何处理才能使得intra-action和inter-action之间的价值估计始终保持一致。本质上是直接由稀疏traj级奖励直接训练token-level的价值模型（且用BAD处理系数），再用PPO进行优化的方法，没有动用熵或者筛选膜对单个token特别处理
+
+GLAM、TWOSOME、POAD的benchmark和所用的模型：
+
+这几篇重点看一下
+**ReAct：[21] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik R Narasimhan, and  Yuan Cao. React: Synergizing reasoning and acting in language models. In The Eleventh International Conference on Learning Representations, 2022. 
+ArCHer [26], also targets token-level supervision for LLMs in interactive environments, it employs a hierarchical RL framework, using a Q-network for action-level credit approximation and REINFORCE [27] for token-level backpropagation.
+Yifei Zhou, Andrea Zanette, Jiayi Pan, Sergey Levine, and Aviral Kumar. Archer: Training  language model agents via hierarchical multi-turn rl. In Forty-first International Conference on Machine Learning, 2024.
+
+RLHF原文
+
+
+接下来要看的几篇：AGENTIC REINFORCEMENT LEARNING WITH IMPLICIT STEP REWARDS
+AGENTIC REINFORCED POLICY OPTIMIZATION
+ReAct、ArCHer、RLHF、CPE
+然后了解一下PRM（以上，捡重点看吧）
+
+剩下的OPSD啥的等开题结束再看
