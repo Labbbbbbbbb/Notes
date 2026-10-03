@@ -92,17 +92,30 @@ GiGPO
 TEMPO
 GRPO和它的varient
 
+**CREST**的机制是由环境的turn-level Reward得到优势的正负，然后利用 privileged self-teacher，并通过 entropy-gated modulation 调节这个 advantage 在不同 token 上的幅度（credit magnitude），最终得到 token-level credit。
+所以粒度上：**session > turn > step > token**（**CREST / BFCL / WildToolBench 这类多轮会话场景**）：turn 和 step 严格区分如上（一个 turn 内含多步工具链）。。CREST 的两层信用分配正好对应：
+- inter-turn：解决"哪个 turn 成功/失败"（环境只需在 turn 边界给 Rk​）；
+- intra-turn：解决"这个 turn 内哪个 token 更关键"（self-teacher+entropy-gate 负责，环境不参与，并且计算magnitude的粒度是直接到token级别的）。
+呃这个啥比说法，我一直以为turn就是step的。。。但是尽管如此，teacher只用于调整magnitude尽管能避免reward hacking，但是仍会限制其表达能力（只要最终结果是好的，每个token都会是正梯度，不管其中是不是有暗藏的坏token）；并且在本文的语境下，其实env只提供了trajectory-level的ground truth奖励，然后利用OPSD和entropy直接给出了token-level的credit，其实可以说并没有一个嵌套的思想。
+![[Pasted image 20261003205545.png]]
 
 GLAM和TWOSOME：预设动作集（而不是生成任意自然语言token来和任务做语义匹配），然后用RL进行优化。每一条轨迹由简单的`turn left、turn right、go forward、pick up、drop、toggle`构成，优化的粒度是action级，而非token/trajectory level。action的优势基于critic计算给出，而action的概率由每个token生成概率的乘积得到
 
-POAD：（可以去看一下POAD那章的小结），在上面两篇工作的基础上不再预设动作集（anyway，似乎这个action的长度还是明显较短的），并且进行了token粒度的creadit assignment，探究了稀疏奖励分配中衰减系数应如何处理才能使得intra-action和inter-action之间的价值估计始终保持一致。本质上是直接由稀疏traj级奖励直接训练token-level的价值模型（且用BAD处理系数），再用PPO进行优化的方法，没有动用熵或者筛选膜对单个token特别处理
+**POAD**：（可以去看一下POAD那章的小结），在上面两篇工作的基础上不再预设动作集（anyway，似乎这个action的长度还是明显较短的），并且进行了token粒度的creadit assignment，探究了稀疏奖励分配中衰减系数应如何处理才能使得intra-action和inter-action之间的价值估计始终保持一致。本质上是直接由稀疏traj级奖励直接训练token-level的价值模型（且用BAD处理系数），再用PPO进行优化的方法，没有动用熵或者筛选膜对单个token特别处理
 
 GLAM、TWOSOME、POAD的benchmark和所用的模型：
+
+
+**ARPO**：agentic RL，针对multi-turn场景（是ALFWorld那种multi-turn，不是CREST那种）
+使用了HotPotQA(多跳推理，模型必须**多轮调用检索工具**（第一跳的结果决定第二跳查什么)，AIME2025(针对reasoning能力)（**AIME** 在这个 pilot 里**不是"无工具的纯推理体检"**，而是以 **TIR（Tool-Integrated Reasoning）** 的形态出现的：解数学题时模型可以调 Python 解释器执行代码（算大数、枚举、验证中间结果），代码执行结果作为 observation 回填，然后继续推理。**)
 
 这几篇重点看一下
 **ReAct：[21] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik R Narasimhan, and  Yuan Cao. React: Synergizing reasoning and acting in language models. In The Eleventh International Conference on Learning Representations, 2022. 
 ArCHer [26], also targets token-level supervision for LLMs in interactive environments, it employs a hierarchical RL framework, using a Q-network for action-level credit approximation and REINFORCE [27] for token-level backpropagation.
 Yifei Zhou, Andrea Zanette, Jiayi Pan, Sergey Levine, and Aviral Kumar. Archer: Training  language model agents via hierarchical multi-turn rl. In Forty-first International Conference on Machine Learning, 2024.
+
+
+
 
 RLHF原文
 
