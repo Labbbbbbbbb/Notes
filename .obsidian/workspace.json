@@ -4,65 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "7db3e2d6e4379ee3",
+        "id": "513069309f6ad93d",
         "type": "tabs",
         "children": [
           {
-            "id": "8ce9e0d0a8becaf6",
+            "id": "ce13e10e1c514858",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Paper-Reading/TodoList.md",
+                "file": "Paper-Reading/iStar.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TodoList"
-            }
-          },
-          {
-            "id": "f4b2ddbdd577b994",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Paper-Reading/POAD.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "POAD"
-            }
-          },
-          {
-            "id": "4ae2256b30af1a5f",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "img/Pasted image 20261003015406.png"
-              },
-              "icon": "lucide-image",
-              "title": "Pasted image 20261003015406"
-            }
-          },
-          {
-            "id": "208bf337144c6e79",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "AGENTIC REINFORCED POLICY OPTIMIZATION"
+              "title": "iStar"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -140,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Paper-Reading/idea.md",
+                "file": "Paper-Reading/iStar.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -159,8 +118,8 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Paper-Reading/idea.md",
-                "linksCollapsed": false,
+                "file": "Paper-Reading/iStar.md",
+                "linksCollapsed": true,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
@@ -202,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Paper-Reading/idea.md",
+                "file": "Paper-Reading/iStar.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -211,12 +170,12 @@
               "title": "大纲"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -231,33 +190,37 @@
   },
   "active": "b134e0f945324164",
   "lastOpenFiles": [
-    "img/Pasted image 20261004021336.png",
-    "img/Pasted image 20261004021109.png",
+    "Paper-Reading/ArCHer.md",
+    "NEST/NEST-思路整理.md",
+    "img/Pasted image 20261005172923.png",
+    "img/Pasted image 20261005170245.png",
+    "img/Pasted image 20261005170243.png",
+    "img/Pasted image 20261005170219.png",
+    "img/Pasted image 20261005155803.png",
+    "img/Pasted image 20261005155155.png",
+    "Paper-Reading/CREST.md",
+    "Paper-Reading/GiGPO.md",
+    "Paper-Reading/idea.md",
+    "Paper-Reading/iStar.md",
+    "Paper-Reading/OPD.md",
+    "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
+    "Paper-Reading/TEMPO.md",
+    "Paper-Reading/TAPO.md",
+    "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
+    "Paper-Reading/ReAct.md",
+    "Paper-Reading/QAE.md",
     "Paper-Reading/POAD.md",
+    "img/Pasted image 20261005153518.png",
+    "img/Pasted image 20261005152751.png",
+    "img/Pasted image 20261005151609.png",
+    "Paper-Reading/TodoList.md",
+    "img/Pasted image 20261003015406.png",
+    "Paper-Reading/TPPO.md",
+    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
     "基础知识整理/实验trick记录.md",
     "基础知识整理/八股学习进程.md",
-    "Paper-Reading/GiGPO.md",
-    "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
-    "img/Pasted image 20261004011127.png",
-    "NEST/NEST-思路整理.md",
-    "Paper-Reading/CREST.md",
-    "img/Pasted image 20261003211516.png",
-    "img/Pasted image 20261003205545.png",
-    "Paper-Reading/OPD.md",
-    "Paper-Reading/QAE.md",
-    "img/Pasted image 20261003015344.png",
-    "img/Pasted image 20261003015406.png",
-    "img/Pasted image 20261003013944.png",
-    "img/Pasted image 20261003013716.png",
     "Paper-Reading/DAPO.md",
-    "Paper-Reading/idea.md",
-    "Paper-Reading/TodoList.md",
-    "img/Pasted image 20261002164848.png",
-    "img/Pasted image 20261001000112.png",
-    "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
-    "Paper-Reading/TAPO.md",
     "基础知识整理",
-    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
     "未命名.canvas",
     "知识点汇总（保研）/Reinforecment Learning.md",
     "知识点汇总（保研）/PolicyGradient理解.md",
@@ -269,7 +232,6 @@
     "NEST/~WRD2860.tmp",
     "NEST/~WRL0003.tmp",
     "NEST/~WRD0002.tmp",
-    "NEST/~WRL0001.tmp",
-    "Paper-Reading/TEMPO.md"
+    "NEST/~WRL0001.tmp"
   ]
 }

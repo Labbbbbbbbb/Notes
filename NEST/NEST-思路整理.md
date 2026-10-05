@@ -61,8 +61,10 @@ tips6:Clip-higher 放宽正 advantage token 的 ratio 上界,难道不是鼓励�
 ![[Pasted image 20260929015430.png]]
 group 内正 advantage 落在"挑战分支"上,不是落在 top token 上，因此DAPO鼓励高熵选择中的低概率token概率变高，倾向于更高熵地探索
 ## 构想
-1.开题意义部分，可以参考一下CREST，写一下RLVR
-
+### 1.开题意义部分，可以参考一下CREST，写一下RLVR
+single-turn-->multi-turn
+RLVR
+Entropy-perspective
 **从entropy的视角看---token级熵掩膜的原因**
 “This balance is especially fragile in RLVR for large models. When entropy is too low, the policy converges prematurely to suboptimal behaviors (entropy collapse); when it is too high, uncontrolled stochasticity attenuates learning signals (entropy explosion). Navigating this entropy dilemma is therefore pivotal for scaling RLVR.”
 DAPO通过clip-higher来避免entropy collapse，HEPO则通过截断低熵token的梯度来避免entropy collapse；QAE看到了entropy collapse和explosion两端的弊病，通过将GRPO优势构造中减去的中位数换成k-percentile，从而避免稀疏奖励中大量的negative advantage造成entropy explosion，并且可以使得大部分token的优势为0（咋做到的）。
@@ -84,13 +86,14 @@ Do not let lowprobability tokens over-dominate in rl for llms. In 2nd AI for Mat
 **On-Policy Distillation**
 benchmark为XSum（输入文章生成摘要），WMT（英德语翻译）,GSM8K（小学数学CoT推理看），其实本身是一个知识蒸馏（KD）的优化算法，不直接属于RLVR，但是值得注意的是这个on-policy的范式让它可以丝滑地与RLVR相结合，并且文中给出了融合RL奖励与KL散度的优化目标
 
+**TPPO**
 
 **LLM Agent相关工作**
-TAPO
-TPPO？是agent吗
-GiGPO
-TEMPO
-GRPO和它的varient
+**TAPO**：
+
+**GiGPO**：
+**TEMPO**：
+**GRPO**和它的varient（主要是DAPO）
 
 **CREST**的机制是由环境的turn-level Reward得到优势的正负，然后利用 privileged self-teacher，并通过 entropy-gated modulation 调节这个 advantage 在不同 token 上的幅度（credit magnitude），最终得到 token-level credit。
 所以粒度上：**session > turn > step > token**（**CREST / BFCL / WildToolBench 这类多轮会话场景**）：turn 和 step 严格区分如上（一个 turn 内含多步工具链）。。CREST 的两层信用分配正好对应：
@@ -109,20 +112,45 @@ GLAM、TWOSOME、POAD的benchmark和所用的模型：
 **ARPO**：agentic RL，针对multi-turn场景（是ALFWorld那种multi-turn，不是CREST那种）
 使用了HotPotQA(多跳推理，模型必须**多轮调用检索工具**（第一跳的结果决定第二跳查什么)，AIME2025(针对reasoning能力)（**AIME** 在这个 pilot 里**不是"无工具的纯推理体检"**，而是以 **TIR（Tool-Integrated Reasoning）** 的形态出现的：解数学题时模型可以调 Python 解释器执行代码（算大数、枚举、验证中间结果），代码执行结果作为 observation 回填，然后继续推理。**)
 
-这几篇重点看一下
-**ReAct：[21] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik R Narasimhan, and  Yuan Cao. React: Synergizing reasoning and acting in language models. In The Eleventh International Conference on Learning Representations, 2022. 
-ArCHer [26], also targets token-level supervision for LLMs in interactive environments, it employs a hierarchical RL framework, using a Q-network for action-level credit approximation and REINFORCE [27] for token-level backpropagation.
-Yifei Zhou, Andrea Zanette, Jiayi Pan, Sergey Levine, and Aviral Kumar. Archer: Training  language model agents via hierarchical multi-turn rl. In Forty-first International Conference on Machine Learning, 2024.
+**iStar**：agentic RL，step-level，用multi-turn DPO的思想训练了一个implicit PRM来提供step-level的reward并计算advantage。
+benchmark是WebShop 、 VisualSokoban and SOTOPIA,
 
+**ReAct**：ALFWorld and WebShop、HotpotQA、Fever
 
+**ArCHer**：agentic RL，分层学习，值得重点分析。见ArCHer笔记
 
-
-RLHF原文
+**RLHF**
 
 
 接下来要看的几篇：AGENTIC REINFORCEMENT LEARNING WITH IMPLICIT STEP REWARDS
 AGENTIC REINFORCED POLICY OPTIMIZATION
-ReAct、ArCHer、RLHF、CPE
+ReAct、ArCHer、
 然后了解一下PRM（以上，捡重点看吧）
 
 剩下的OPSD啥的等开题结束再看
+THU，Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?
+看一下ArCHer笔记里面后面的Question，复习一下可微不可微采样不采样
+DPO，对比iStar里面的multi-turn DPO
+RLHF、CPE
+看一下下文的VAE路线
+
+### 2.Nest耦合设计
+
+>[!NOTE]
+>潜在动作空间：把整句 utterance 压缩成连续 latent 向量再在 latent 上做 TD——本质就是你说的“参数化动作”，代价是 latent 与真实语言分布的失配。详细说明一下这条路径
+
+这条路线的核心是**把“学策略”和“生成文本”解耦**：在连续 latent 空间里做决策和 TD，用一个解码器把 latent 翻译回文本。下面按机制、为什么能解 TD 难题、以及失配出在哪三部分讲。
+![[Pasted image 20261005155155.png]]
+
+![[Pasted image 20261005155803.png]]
+
+现在的想法时在AR LLM生成的过程中，给它外接一个小的动作头，输出一个latent vector作为动作，然后作为一个条件继续参与token的生成，从而完成嵌套的动作级别和token级别的打分。听起来和COCONUT等用 LLM 自己的隐状态当 latent的路线比较接近（上图的第3条路线），但是这个隐状态要作为token生成的条件应该往哪输入呢？一定要从prompt输入吗？这样的话要想生成一串token岂不是要重复两次前向过程
+![[Pasted image 20261005170219.png]]
+
+![[Pasted image 20261005170245.png]]
+
+![[Pasted image 20261005172923.png]]
+
+FeUdal Networks for Hierarchical Reinforcement Learning，**ICML2017**
+Controlling Large Language Model with Latent Actions，LAMDA，**ICML 2025**
+Training Large Language Models to Reason in a Continuous Latent Space，Meta，**COLM 2025**
