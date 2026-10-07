@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "一些生存技巧/魔法.md",
+                "file": "Paper-Reading/CoLA.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "一些生存技巧/魔法.md",
+                "file": "Paper-Reading/CoLA.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": true
               },
@@ -188,14 +188,13 @@
       "bases:新建数据库": false
     }
   },
-  "active": "ce13e10e1c514858",
+  "active": "b134e0f945324164",
   "lastOpenFiles": [
-    "NEST/NEST-思路整理.md",
-    "Paper-Reading/TAPO.md",
-    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
-    "Paper-Reading/CoLA.md",
-    "Paper-Reading/idea.md",
-    "Paper-Reading/COCONUT.md",
+    "img/Pasted image 20261008022332.png",
+    "一些生存技巧/魔法.md",
+    "NEST/~WRL0001.tmp",
+    "NEST/~WRD0000.tmp",
+    "NEST/~$毕业论文（设计）开题报告-詹咏庭.doc",
     "img/Pasted image 20261007174430.png",
     "img/Pasted image 20261007174254.png",
     "img/Pasted image 20261007172115.png",
@@ -203,20 +202,20 @@
     "img/Pasted image 20261007171512.png",
     "img/Pasted image 20261007171439.png",
     "img/Pasted image 20261007153125.png",
-    "一些生存技巧/魔法.md",
+    "Paper-Reading/CoLA.md",
     "img/Pasted image 20261007112314.png",
+    "Paper-Reading/COCONUT.md",
     "一些生存技巧",
-    "NEST/~$毕业论文（设计）开题报告-詹咏庭.doc",
+    "NEST/NEST-思路整理.md",
     "NEST/本科毕业论文（设计）开题报告-詹咏庭.doc",
     "NEST/~$毕业论文（设计）开题报告-詹咏庭_最终版_备份.doc",
     "NEST/~$毕业论文（设计）开题报告-詹咏庭_最终版.doc",
     "NEST/本科生毕业论文（设计）任务书 - 詹咏庭.docx",
     "NEST/~WRD1994.tmp",
     "NEST/~WRL3759.tmp",
-    "NEST/~WRD3755.tmp",
-    "NEST/~WRL0001.tmp",
     "img/Pasted image 20261006161157.png",
     "img/Pasted image 20261006161144.png",
+    "Paper-Reading/idea.md",
     "Paper-Reading/iStar.md",
     "Paper-Reading/OPD.md",
     "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
@@ -228,14 +227,15 @@
     "Paper-Reading/TodoList.md",
     "Paper-Reading/GiGPO.md",
     "Paper-Reading/TEMPO.md",
+    "Paper-Reading/TAPO.md",
     "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
     "Paper-Reading/ReAct.md",
     "Paper-Reading/POAD.md",
+    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
     "基础知识整理/实验trick记录.md",
     "基础知识整理/八股学习进程.md",
     "Paper-Reading/DAPO.md",
     "未命名.canvas",
-    "知识点汇总（保研）/Reinforecment Learning.md",
-    "知识点汇总（保研）/PolicyGradient理解.md"
+    "知识点汇总（保研）/Reinforecment Learning.md"
   ]
 }
