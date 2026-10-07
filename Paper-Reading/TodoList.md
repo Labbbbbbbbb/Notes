@@ -1,20 +1,22 @@
-HEPO
-RLHF
-DPO
-Reject-Sampling
-PRM
-DAPO?
+
+**OPSD
+THU，Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?
+看一下ArCHer笔记里面后面的Question，复习一下可微不可微采样不采样
+DPO，对比iStar里面的multi-turn DPO
+RLHF、CPE
+看一下Nest思路整理后面的VAE路线
+了解一下agentic的World Model
 
 TreeRL Hou et al. (2025) integrates an entropy-guided sampler (EPTree) that branches at uncertain tokens, then back-propagates leaf rewards to provide global and local (step) advantages thereby eliminating a separate process reward model.
 
 Tree-OPO Huang et al. (2025) leverages off-policy teacher MCTS to build prefix trees and proposes staged, prefix-conditioned advantage estimation to stabilize GRPO-style updates.
 
-
 [Qwen3 Technical Report](https://arxiv.org/html/2505.09388.pdf#abstract1) ....呃？（重点看一下post-training部分）
-OPD、OPSD
+DAPO
 Recursive Self‑Improvement Agent
 MoE
 DAFI
+Reject-Sampling
 
 Q:目前的post-training算法大都只取模型的输出而不细究模型是dense/MoE架构，有没有一种后训练方法会针对MoE的路由来进一步分配奖励呢？
 A:有的——而且这正是 2025 年底到 2026 年刚兴起的一条明确研究线。不过先给一个重要的定性判断： 现有工作几乎都把路由信息用于「稳定训练 / 负载均衡 / 探索」，真正做「哪个专家导致了成功」的反事实专家级信用分配的方法基本还没有 ——后者恰好是开放空白。下面按技术路线分四类介绍。

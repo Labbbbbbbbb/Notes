@@ -35,7 +35,6 @@ $$
 ![[Pasted image 20260921222410.png]]
 看一下这两篇的想法
  ① CREST（[arXiv:2608.13179](https://arxiv.org/abs/2608.13179) ，2026.08）——Agent 场景，两层嵌套
- **"CREST 的方法在具备 per-turn verifier 的场景下是有效的，但大量真实 agent 环境不提供 per-turn 标注，本工作(NEST)解决的是这个场景下的信用分配"**。
  同时尽管拿teacher来当magnitude的方法有效避免了错误方向和reward hacking，但是一个turn失败就代表所有token均应该背离teacher的做法，也不尽合理，P1 性质 sign(At​)=sign(Aturn) 既是它的安全保证，也是它的表达力上限。
  ② SHAPE（[arXiv:2604.06636](https://arxiv.org/html/2604.06636v1) ，华为/北大，2026.04）——单轮推理，两段式
 ## ToDo
@@ -117,22 +116,14 @@ benchmark是WebShop 、 VisualSokoban and SOTOPIA,
 
 **ReAct**：ALFWorld and WebShop、HotpotQA、Fever
 
-**ArCHer**：agentic RL，分层学习，值得重点分析。见ArCHer笔记
+**ArCHer**：agentic RL，分层学习，值得重点分析。见ArCHer笔记，benchmark ：Twenty Questions Subset, Twenty Questions, Guess My City, and WebShop
+
 
 **RLHF**
 
 
-接下来要看的几篇：AGENTIC REINFORCEMENT LEARNING WITH IMPLICIT STEP REWARDS
-AGENTIC REINFORCED POLICY OPTIMIZATION
-ReAct、ArCHer、
-然后了解一下PRM（以上，捡重点看吧）
+开题结束后有时间看一下todolist
 
-剩下的OPSD啥的等开题结束再看
-THU，Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?
-看一下ArCHer笔记里面后面的Question，复习一下可微不可微采样不采样
-DPO，对比iStar里面的multi-turn DPO
-RLHF、CPE
-看一下下文的VAE路线
 
 ### 2.Nest耦合设计
 
@@ -154,3 +145,7 @@ RLHF、CPE
 FeUdal Networks for Hierarchical Reinforcement Learning，**ICML2017**
 Controlling Large Language Model with Latent Actions，LAMDA，**ICML 2025**
 Training Large Language Models to Reason in a Continuous Latent Space，Meta，**COLM 2025**
+
+![[Pasted image 20261006161157.png]]
+
+![[Pasted image 20261006161144.png]]
