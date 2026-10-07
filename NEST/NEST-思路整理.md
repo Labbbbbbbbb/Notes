@@ -146,6 +146,9 @@ FeUdal Networks for Hierarchical Reinforcement Learning，**ICML2017**
 Controlling Large Language Model with Latent Actions，LAMDA，**ICML 2025**
 Training Large Language Models to Reason in a Continuous Latent Space，Meta，**COLM 2025**
 
+可以去看一下COCONUT的related work，Latent reasoning in LLMs.部分，还挺有启发的
+
 ![[Pasted image 20261006161157.png]]
 
 ![[Pasted image 20261006161144.png]]
+

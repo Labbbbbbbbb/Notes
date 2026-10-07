@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "一些生存技巧/魔法.md",
+                "file": "Paper-Reading/CoLA.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "魔法"
+              "title": "CoLA"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "一些生存技巧/魔法.md",
+                "file": "Paper-Reading/CoLA.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -188,14 +188,25 @@
       "bases:新建数据库": false
     }
   },
-  "active": "b134e0f945324164",
+  "active": "ce13e10e1c514858",
   "lastOpenFiles": [
-    "img/Pasted image 20261007112314.png",
+    "NEST/NEST-思路整理.md",
+    "Paper-Reading/TAPO.md",
+    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
+    "Paper-Reading/CoLA.md",
+    "Paper-Reading/idea.md",
     "Paper-Reading/COCONUT.md",
+    "img/Pasted image 20261007174430.png",
+    "img/Pasted image 20261007174254.png",
+    "img/Pasted image 20261007172115.png",
+    "img/Pasted image 20261007172023.png",
+    "img/Pasted image 20261007171512.png",
+    "img/Pasted image 20261007171439.png",
+    "img/Pasted image 20261007153125.png",
     "一些生存技巧/魔法.md",
+    "img/Pasted image 20261007112314.png",
     "一些生存技巧",
     "NEST/~$毕业论文（设计）开题报告-詹咏庭.doc",
-    "NEST/NEST-思路整理.md",
     "NEST/本科毕业论文（设计）开题报告-詹咏庭.doc",
     "NEST/~$毕业论文（设计）开题报告-詹咏庭_最终版_备份.doc",
     "NEST/~$毕业论文（设计）开题报告-詹咏庭_最终版.doc",
@@ -206,7 +217,6 @@
     "NEST/~WRL0001.tmp",
     "img/Pasted image 20261006161157.png",
     "img/Pasted image 20261006161144.png",
-    "Paper-Reading/idea.md",
     "Paper-Reading/iStar.md",
     "Paper-Reading/OPD.md",
     "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
@@ -215,22 +225,12 @@
     "Paper-Reading/QAE.md",
     "Paper-Reading/ArCHer.md",
     "Paper-Reading/FuNs.md",
-    "img/Pasted image 20261005212328.png",
-    "img/Pasted image 20261005205941.png",
-    "img/Pasted image 20261005205903.png",
-    "img/Pasted image 20261005204859.png",
     "Paper-Reading/TodoList.md",
-    "img/Pasted image 20261005172923.png",
-    "img/Pasted image 20261005170245.png",
-    "img/Pasted image 20261005170243.png",
-    "img/Pasted image 20261005170219.png",
     "Paper-Reading/GiGPO.md",
     "Paper-Reading/TEMPO.md",
-    "Paper-Reading/TAPO.md",
     "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
     "Paper-Reading/ReAct.md",
     "Paper-Reading/POAD.md",
-    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
     "基础知识整理/实验trick记录.md",
     "基础知识整理/八股学习进程.md",
     "Paper-Reading/DAPO.md",
