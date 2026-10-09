@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#64748b" stroke-width="1.7"/></marker><style>text{font-family:'Microsoft YaHei','Segoe UI',sans-serif;fill:#172b4d}.title{font-size:42px;font-weight:700}.sub{font-size:22px;fill:#64748b}.head{font-size:27px;font-weight:700}.body{font-size:23px}.small{font-size:21px;fill:#52647b}.label{font-size:19px;font-weight:700;letter-spacing:2px}.line{fill:none;stroke:#64748b;stroke-width:2.5;marker-end:url(#arrow)}</style></defs>
+<rect width="1920" height="1080" fill="#ffffff"/>
+<text x="80" y="82" class="title">动作隐向量引导的双粒度强化学习</text>
+<text x="80" y="126" class="sub">在每个工具交互边界注入动作级隐变量，分别优化动作决策与词元生成 · 方案设计</text>
+<rect x="80" y="169" width="1760" height="411" rx="24" fill="#f7f9fc"/>
+<text x="110" y="213" class="label" fill="#52647b">01  动作步 t：状态 → 隐向量 → 条件生成 → 环境反馈</text>
+<rect x="110" y="270" width="260" height="177" rx="18" fill="#eaf5f3" stroke="#a7d6cd"/>
+<text x="135" y="310" class="small">STATE</text><text x="135" y="350" class="head">读取当前状态</text><text x="135" y="390" class="body">历史 + 新观测 oₜ</text><text x="135" y="422" class="small">LLM 编码得到 hₜ</text>
+<rect x="415" y="270" width="300" height="177" rx="18" fill="#f0ecff" stroke="#c6b7f2"/>
+<text x="440" y="310" class="small">LATENT POLICY · φ</text><text x="440" y="350" class="head">小型动作生成头</text><text x="440" y="390" class="body">采样 zₜ ∼ pφ(· | hₜ)</text><text x="440" y="422" class="small">每个动作步生成一次</text>
+<rect x="760" y="270" width="300" height="177" rx="18" fill="#f0ecff" stroke="#c6b7f2"/>
+<text x="785" y="310" class="small">LATENT INJECTION</text><text x="785" y="350" class="head">插入 K 个隐向量位置</text><text x="785" y="390" class="body">zₜ → 投影 → [p₁ … pₖ]</text><text x="785" y="422" class="small">新动作起始处写入上下文</text>
+<rect x="1105" y="270" width="330" height="177" rx="18" fill="#eaf1ff" stroke="#afc5ed"/>
+<text x="1130" y="310" class="small">TOKEN POLICY · θ</text><text x="1130" y="350" class="head">LLM 条件生成</text><text x="1130" y="390" class="body">πθ(yₜ | sₜ, zₜ)</text><text x="1130" y="422" class="small">生成本步文本与工具调用</text>
+<rect x="1480" y="270" width="330" height="177" rx="18" fill="#eaf5f3" stroke="#a7d6cd"/>
+<text x="1505" y="310" class="small">ENVIRONMENT</text><text x="1505" y="350" class="head">执行工具 / 环境动作</text><text x="1505" y="390" class="body">获得新观测 oₜ₊₁</text><text x="1505" y="422" class="small">进入下一动作边界</text>
+<path d="M370 360H405" class="line"/><path d="M715 360H750" class="line"/><path d="M1060 360H1095" class="line"/><path d="M1435 360H1470" class="line"/>
+<path d="M1645 447V516H240V457" class="line" stroke-dasharray="8 7"/>
+<rect x="725" y="496" width="465" height="40" rx="20" fill="#f7f9fc"/><text x="752" y="523" class="small">工具反馈回填 · t ← t + 1 · 重新生成 z</text>
+<text x="80" y="633" class="label">02  同一交互轨迹，两种粒度的信用分配与策略更新</text>
+<rect x="80" y="661" width="858" height="269" rx="22" fill="#f4f0ff" stroke="#d5c8f3"/>
+<rect x="982" y="661" width="858" height="269" rx="22" fill="#edf4ff" stroke="#c4d7f4"/>
+<rect x="110" y="687" width="106" height="35" rx="17" fill="#7856bb"/><text x="130" y="712" style="font-size:19px;fill:white;font-weight:700">动作级</text>
+<text x="235" y="714" class="head">隐向量策略优化</text>
+<text x="110" y="761" class="body">动作优势 Aₜᶻ：拟采用 GiGPO / ARPO</text>
+<text x="110" y="807" style="font-size:27px;font-family:'Segoe UI','Microsoft YaHei',sans-serif">Δφ ∝ Aₜᶻ ∇φ log pφ(zₜ | sg[hₜ])</text>
+<path d="M110 832H908" stroke="#d5c8f3"/>
+<text x="110" y="870" class="body">更新动作头 φ · 状态表示 hₜ 停止梯度</text>
+<text x="110" y="905" class="small">学习“本动作步采用什么隐在决策”</text>
+<rect x="1012" y="687" width="106" height="35" rx="17" fill="#346ccc"/><text x="1032" y="712" style="font-size:19px;fill:white;font-weight:700">词元级</text>
+<text x="1137" y="714" class="head">条件生成策略优化</text>
+<text x="1012" y="761" class="body">词元优势 Âₜ,ₖ：拟采用 TEMPO；可叠加熵掩膜 mₜ,ₖ</text>
+<text x="1012" y="807" style="font-size:26px;font-family:'Segoe UI','Microsoft YaHei',sans-serif">Δθ ∝ Σₖ mₜ,ₖ Âₜ,ₖ ∇θ log πθ(yₜ,ₖ | sₜ, yₜ,&lt;ₖ, sg[zₜ])</text>
+<path d="M1012 832H1810" stroke="#c4d7f4"/>
+<text x="1012" y="870" class="body">更新 LLM θ · 隐向量 zₜ 停止梯度</text>
+<text x="1012" y="905" class="small">学习“给定动作隐向量，如何生成本步词元”</text>
+<rect x="80" y="959" width="1760" height="69" rx="15" fill="#f6f8fb"/>
+<text x="108" y="1002" style="font-size:22px">联合策略 pφ(zₜ | sₜ) · πθ(yₜ | sₜ, zₜ)</text>
+<text x="725" y="1002" class="small">sg = 停止梯度  ·  无熵掩膜时 m = 1  ·  熵掩膜用于更新加权，不等同于奖励</text>
+</svg>

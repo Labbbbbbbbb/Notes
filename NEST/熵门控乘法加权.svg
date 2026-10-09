@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#728198" stroke-width="1.7"/></marker><style>text{font-family:'Microsoft YaHei','Segoe UI',sans-serif;fill:#192d4b}.title{font-size:44px;font-weight:700}.sub{font-size:23px;fill:#65758c}.head{font-size:27px;font-weight:700}.body{font-size:24px}.small{font-size:22px;fill:#52647b}.line{fill:none;stroke:#728198;stroke-width:2.5;marker-end:url(#arr)}.math{font-family:'Segoe UI','Microsoft YaHei',sans-serif;font-size:34px;font-weight:600;fill:#7048b8}</style></defs>
+<rect width="1920" height="1080" fill="white"/>
+<text x="80" y="83" class="title">步级优势 × 词元熵门控</text><text x="80" y="129" class="sub">由步级优势决定方向，由非负词元权重分配步内更新强度</text>
+<rect x="575" y="170" width="770" height="90" rx="18" fill="#eaf6f2" stroke="#acd6c8"/>
+<text x="960" y="209" text-anchor="middle" class="head">同一任务 · G 条多轮交互轨迹</text><text x="960" y="241" text-anchor="middle" class="small">轨迹结束获得终局奖励 Rᵢ，同时保留词元统计</text>
+<path d="M960 260V284H480V312" class="line"/><path d="M960 284H1440V312" class="line"/>
+<rect x="140" y="322" width="680" height="139" rx="18" fill="#eaf1ff" stroke="#b6cdf1"/>
+<text x="174" y="365" class="head">估计步级优势</text><text x="174" y="405" class="body">锚状态分组 + 组内归一化（GiGPO 式）</text><text x="174" y="439" class="small">每个动作步一个带符号的优势 Aˢᵗᵉᵖ</text>
+<rect x="1100" y="322" width="680" height="139" rx="18" fill="#fff5db" stroke="#efd093"/>
+<text x="1134" y="365" class="head">构建词元熵门控</text><text x="1134" y="405" class="body">逐词元熵 H → 非负门控权重</text><text x="1134" y="439" class="small">仅选定词元开启；其余位置权重为 0</text>
+<path d="M480 461V484" class="line"/><path d="M1440 461V484" class="line"/>
+<rect x="140" y="494" width="680" height="96" rx="16" fill="#dce9ff"/>
+<text x="174" y="534" class="head">步内广播：Aˢᵗᵉᵖᵢ,ₛ₍ₜ₎</text><text x="174" y="570" class="small">同一步所有词元共享步级信用</text>
+<rect x="1100" y="494" width="680" height="96" rx="16" fill="#ffedbb"/>
+<text x="1134" y="534" class="head">步内归一化：mean(m) = 1</text><text x="1134" y="570" class="small">m ≥ 0：只调幅度，不翻转优势符号</text>
+<path d="M480 590V633H912" class="line"/><path d="M1440 590V633H1008" class="line"/>
+<circle cx="960" cy="633" r="35" fill="#f0eaff" stroke="#aa89e5" stroke-width="2"/><text x="960" y="647" text-anchor="middle" style="font-size:43px;fill:#7950bc">×</text>
+<path d="M960 669V685" class="line"/>
+<rect x="450" y="695" width="1020" height="104" rx="18" fill="#f5f0ff" stroke="#c5b1e9"/>
+<text x="960" y="739" text-anchor="middle" class="math">Aᵍᵃᵗᵉᵈᵢ,ₜ = Aˢᵗᵉᵖᵢ,ₛ₍ₜ₎ · mᵢ,ₜ</text><text x="960" y="779" text-anchor="middle" class="small">更新方向来自步级优势 · 步内权重来自词元熵</text>
+<path d="M960 799V819" class="line"/>
+<rect x="450" y="829" width="1020" height="60" rx="15" fill="#edf2f9"/><text x="960" y="868" text-anchor="middle" class="body">代入 PPO / GRPO 裁剪策略目标 → 更新 LLM 参数 θ</text>
+<rect x="80" y="927" width="860" height="124" rx="17" fill="#f4f8fc"/><text x="106" y="962" style="font-size:23px;font-weight:700">结构性质</text><text x="106" y="997" class="small">m ≥ 0 保持步级优势符号；m = 0 屏蔽对应词元。</text><text x="106" y="1030" class="small">若在全步词元上均值归一为 1，可保持步内优势权重总和。</text>
+<rect x="980" y="927" width="860" height="124" rx="17" fill="#fff6ed"/><text x="1006" y="962" style="font-size:23px;font-weight:700;fill:#9b5e24">实现与验证边界</text><text x="1006" y="997" class="small">需明确归一化范围，并处理全零掩膜；高熵不等于关键。</text><text x="1006" y="1030" class="small">权重总和保持，不代表梯度范数或实际参数更新幅度保持。</text>
+</svg>
