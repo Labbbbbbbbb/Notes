@@ -107,3 +107,57 @@ https://chatgpt.com/s/t_6ad3945e9d4881918d700be270e2d747
 # Paper2
 Toward Secure and Reliable PDDL Formalization  of Large Language Models with  Planner-in-the-Loop Feedback
 
+Benchmark构建+基于这个Benchmark的新训练框架、
+这篇论文的核心任务是让 LLM 更好地把自然语言（NL）转换成 PDDL，而不是训练 Planner 生成更好的计划。 Planner 是外部的符号工具，负责验证 LLM 生成的 PDDL，并提供可解性和计划质量方面的反馈。
+>[!NOTE] 注意
+>**这篇论文的核心任务是让 LLM 更好地把自然语言（NL）转换成 PDDL，而不是训练 Planner 生成更好的计划。 Planner 是外部的符号工具，负责验证 LLM 生成的 PDDL，并提供可解性和计划质量方面的反馈。**
+## Method
+![[Pasted image 20261018153015.png]]
+
+### 训练推理时
+![[Pasted image 20261018133636.png]]
+
+（On the learning side, we combine supervised fine-tuning with planner-grounded preference optimization）（使用下面bench自己构造的数据）
+- SFT：用 NL–PDDL 配对数据训练 LLM，让它学会从自然语言生成 PDDL。
+- DPO：通过规划器验证结果构造偏好数据，让模型倾向于生成可求解、规划质量更好的 PDDL。
+（at inference time, if parsing or planning fails, the system converts diagnostic logs into structured feedback and prompts the model to perform localized repairs until verification succeeds or a fixed budget is reached.）
+- 推理时修正：模型部署或评测时，再通过实际的 Planner-in-the-loop 反馈迭代修改错误输出。
+因此，论文的整体思路可以概括为：
+构建 NL–PDDL 数据 → 训练 LLM 做 NL-to-PDDL 转换 → 用规划器结果提供训练信号 → 推理时通过规划器反馈修正输出。
+
+### 数据构建时（Benchmark）
+![[Pasted image 20261018133734.png]]
+
+![[Pasted image 20261018144312.png]]
+
+DPO阶段数据构建：(离线DPO)
+![[Pasted image 20261018144430.png]]
+![[Pasted image 20261018152211.png]]
+参考 PDDL $y^+$ 能让规划器找到有效计划，例如先装货、再驾驶、最后卸货。
+然后，程序化扰动可能生成一个候选 $y^-$，例如删除 `(Connected A B)` 这一初始事实。
+如果领域动作规则要求道路连通才能驾驶，那么这个候选就可能无法完成任务。经过验证后，它便可以作为负样本。
+DPO 学习的是：$y^+ \succ y^- \mid x$
+也就是：对于同一个自然语言任务 \(x\)，模型应该更偏好正确的参考形式化，而不是这个较差的候选。
+这里需要注意两个细节：
+- 负样本不一定全部是语法错误。一个 PDDL 完全可以解析，但仍然不可解。 
+- 并不是所有扰动都自动成为负样本。论文描述的是经过 Validator 和 Planner 筛选，保留不可解或规划质量明显差于参考结果的候选。
+所以，Planner 的价值在于提供可执行的筛选依据，而不只是让模型自己判断哪个答案更合理。
+
+Benchmark打分工作：
+对每个实例，记录自然语言输入 $x_i$、参考 PDDL $y_i$ 和模型输出 $\hat y_i$。
+然后计算四个指标：
+![[Pasted image 20261018152412.png]]
+
+## Question
+### 1.我有点没懂，我觉得这个构建数据的构成和评估的过程其实很割裂，我觉得只能说是一个方案但是称不上是一个合体的benchmark，我感觉这个打分的东西和生成数据的完全是可以拆开的两个部分。是我哪里不了解没get到吗？并且这个打分其实就是最后给出一个数据吧，这个数据也并没有再一次作为反馈去给到训练环节。
+![[Pasted image 20261018155907.png]]
+![[Pasted image 20261018161814.png]]
+
+>[!NOTE]
+>反馈阶段也是调用 NL-PDDL-Bench 所采用的同一套符号工具链，但 iterative repair 本身属于论文的推理方法，不是 Benchmark 数据集自带的功能。但是这一套统一的工具链也是构建这一套基础设施（bench，数据集，反馈，评分）的意义所在。
+### 2.等一下？所以这篇论文的任务是让Planner生成更好的计划还是让LLM能更好地把NL转换成PDDL？它注重的是哪方面的训练？
+这篇论文的核心任务是让 LLM 更好地把自然语言（NL）转换成 PDDL，而不是训练 Planner 生成更好的计划。 Planner 是外部的符号工具，负责验证 LLM 生成的 PDDL，并提供可解性和计划质量方面的反馈。![[Pasted image 20261018160620.png]]
+
+### 3.文中提到了multi-domain，后面的实验也又cross-domain，所以训练的时候是一起在多个domain上一起训练然后同时发现它在没见过的domain上也可以表现得比较好吗
+https://chatgpt.com/s/t_6ad487009ad48191a5e1bb9bb5e875cf
+
