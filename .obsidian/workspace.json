@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Paper-Reading/idea.md",
+                "file": "Paper-Reading/GiGPO.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "idea"
+              "title": "GiGPO"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Paper-Reading/idea.md",
+                "file": "Paper-Reading/GiGPO.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,6 +190,7 @@
   },
   "active": "ce13e10e1c514858",
   "lastOpenFiles": [
+    "Paper-Reading/idea.md",
     "img/Pasted image 20261018133734.png",
     "img/Pasted image 20261018133636.png",
     "img/Pasted image 20261017230852.png",
@@ -200,13 +201,11 @@
     "img/Pasted image 20261018155907.png",
     "img/Pasted image 20261018153015.png",
     "img/Pasted image 20261018152412.png",
-    "img/Pasted image 20261018152211.png",
     "Paper-Reading/GiGPO.md",
     "Paper-Reading/FuNs.md",
     "Paper-Reading/DAPO.md",
     "Paper-Reading/CREST.md",
     "Paper-Reading/Symbolic Planning.md",
-    "Paper-Reading/idea.md",
     "Paper-Reading/ALFWorld.md",
     "Paper-Reading/ArCHer.md",
     "一些生存技巧/魔法.md",
