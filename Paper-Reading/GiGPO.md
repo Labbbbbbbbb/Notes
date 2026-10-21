@@ -22,7 +22,8 @@ examples/gigpo_trainer/run_alfworld.sh
   ▼
 verl.trainer.main_ppo
   ▼
-RayPPOTrainer.fit()
+RayPPOTrainer.fit() 
+#(最核心实现，位于verl\trainer\ppo\ray_trainer.py，class RayPPOTrainer)
   ├─ 采集环境轨迹
   ├─ compute_step_discounted_returns() → step_rewards
   ├─ 构造 token_level_rewards
@@ -33,4 +34,15 @@ RayPPOTrainer.fit()
   │         ├─ step_norm_reward()
   │         └─ 合并两种优势
   └─ 用 advantages 更新 actor
+```
+
+
+
+agent_system\multi_turn_rollout\rollout_loop.py中是rollout的具体实现，其中`    def vanilla_multi_turn_loop(`是最主要的实现之一，里面的:
+```
+batch = self.preprocess_batch(gen_batch=gen_batch, obs=obs) 基于上一轮返回obs构建新的输入prompt
+```
+
+```
+            batch_output_padded = actor_rollout_wg.generate_sequences(batch_input_padded) 模型生成了新的答复，经处理后送进env。
 ```

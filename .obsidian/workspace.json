@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Paper-Reading/GiGPO.md",
+                "file": "Paper-Reading/idea.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "GiGPO"
+              "title": "idea"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Paper-Reading/GiGPO.md",
+                "file": "Paper-Reading/idea.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,7 +190,18 @@
   },
   "active": "ce13e10e1c514858",
   "lastOpenFiles": [
+    "NEST/开题资料/~WRL2109.tmp",
+    "NEST/开题资料/~WRD2105.tmp",
+    "Paper-Reading/MIG.md",
     "Paper-Reading/idea.md",
+    "Paper-Reading/GiGPO.md",
+    "img/Pasted image 20261021122630.png",
+    "img/Pasted image 20261021122615.png",
+    "NEST/NEST-思路整理.md",
+    "NEST/开题资料/~$开题报告-詹咏庭-v2.0.doc",
+    "NEST/开题资料/毕设开题报告-詹咏庭-v2.0.doc",
+    "NEST/开题资料/本科毕业论文（设计）开题报告-詹咏庭 - 副本.doc",
+    "NEST/开题资料/~$毕业论文（设计）开题报告-詹咏庭.doc",
     "img/Pasted image 20261018133734.png",
     "img/Pasted image 20261018133636.png",
     "img/Pasted image 20261017230852.png",
@@ -199,9 +210,6 @@
     "img/Pasted image 20261018161814.png",
     "img/Pasted image 20261018160620.png",
     "img/Pasted image 20261018155907.png",
-    "img/Pasted image 20261018153015.png",
-    "img/Pasted image 20261018152412.png",
-    "Paper-Reading/GiGPO.md",
     "Paper-Reading/FuNs.md",
     "Paper-Reading/DAPO.md",
     "Paper-Reading/CREST.md",
@@ -215,13 +223,7 @@
     "NEST/~$毕业论文（设计）开题报告-詹咏庭.doc",
     "Paper-Reading/COCONUT.md",
     "一些生存技巧",
-    "NEST/NEST-思路整理.md",
     "NEST/本科毕业论文（设计）开题报告-詹咏庭.doc",
-    "NEST/~$毕业论文（设计）开题报告-詹咏庭_最终版_备份.doc",
-    "NEST/~$毕业论文（设计）开题报告-詹咏庭_最终版.doc",
-    "NEST/本科生毕业论文（设计）任务书 - 詹咏庭.docx",
-    "NEST/~WRD1994.tmp",
-    "NEST/~WRL3759.tmp",
     "Paper-Reading/iStar.md",
     "Paper-Reading/OPD.md",
     "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
@@ -234,7 +236,6 @@
     "Paper-Reading/ReAct.md",
     "Paper-Reading/POAD.md",
     "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
-    "基础知识整理/实验trick记录.md",
     "未命名.canvas"
   ]
 }
