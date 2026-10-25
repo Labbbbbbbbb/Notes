@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "基础知识整理/IT.md",
+                "file": "一些生存技巧/课题组计算节点代理方法.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "IT"
+              "title": "课题组计算节点代理方法"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "基础知识整理/IT.md",
+                "file": "一些生存技巧/课题组计算节点代理方法.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,8 +190,10 @@
   },
   "active": "ce13e10e1c514858",
   "lastOpenFiles": [
-    "Paper-Reading/MIG.md",
+    "一些生存技巧/魔法.md",
+    "一些生存技巧/课题组计算节点代理方法.md",
     "基础知识整理/IT.md",
+    "Paper-Reading/MIG.md",
     "NEST/开题资料/毕设开题报告-詹咏庭-final.docx",
     "NEST/开题资料/2023312412-詹咏庭-多轮大语言模型智能体中步骤-词元级优势的嵌套估计.pdf",
     "NEST/开题资料/~WRL2809.tmp",
@@ -221,7 +223,6 @@
     "Paper-Reading/Symbolic Planning.md",
     "Paper-Reading/ALFWorld.md",
     "Paper-Reading/ArCHer.md",
-    "一些生存技巧/魔法.md",
     "Paper-Reading/CoLA.md",
     "Paper-Reading/COCONUT.md",
     "Paper-Reading/iStar.md",
@@ -235,7 +236,6 @@
     "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
     "Paper-Reading/ReAct.md",
     "Paper-Reading/POAD.md",
-    "Paper-Reading/Beyond the 80-20 rule（HEPO）.md",
     "未命名.canvas"
   ]
 }
