@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Paper-Reading/idea.md",
+                "file": "基础知识整理/IT.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "idea"
+              "title": "IT"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Paper-Reading/idea.md",
+                "file": "基础知识整理/IT.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,20 +190,20 @@
   },
   "active": "ce13e10e1c514858",
   "lastOpenFiles": [
-    "NEST/开题资料/~$开题报告-詹咏庭-v2.0.docx",
-    "NEST/开题资料/~WRL1666.tmp",
-    "NEST/开题资料/~WRD1655.tmp",
-    "NEST/开题资料/msoAF7F.tmp",
-    "NEST/开题资料/毕设开题报告-詹咏庭-v2.0.pdf",
-    "NEST/开题资料/mso289D.tmp",
-    "NEST/开题资料/~WRL3140.tmp",
-    "NEST/开题资料/~WRD3128.tmp",
-    "NEST/开题资料/毕设开题报告-詹咏庭-v2.0.docx",
-    "NEST/开题资料/~WRL2309.tmp",
-    "NEST/开题资料/~WRD2306.tmp",
-    "Pasted image 20261022001106.png",
     "Paper-Reading/MIG.md",
+    "基础知识整理/IT.md",
+    "NEST/开题资料/毕设开题报告-詹咏庭-final.docx",
+    "NEST/开题资料/2023312412-詹咏庭-多轮大语言模型智能体中步骤-词元级优势的嵌套估计.pdf",
+    "NEST/开题资料/~WRL2809.tmp",
+    "NEST/开题资料/~WRD2801.tmp",
+    "NEST/开题资料/~WRD2797.tmp",
+    "NEST/开题资料/msoE12D.tmp",
+    "NEST/开题资料/msoDA08.tmp",
+    "NEST/开题资料/~WRL2886.tmp",
+    "NEST/开题资料/~WRD2870.tmp",
     "Paper-Reading/idea.md",
+    "NEST/开题资料/~$开题报告-詹咏庭-v2.0.docx",
+    "Pasted image 20261022001106.png",
     "img/Pasted image 20261022000455.png",
     "img/Pasted image 20261021121657.png",
     "Paper-Reading/GiGPO.md",
