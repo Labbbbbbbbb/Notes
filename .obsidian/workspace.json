@@ -175,7 +175,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -188,11 +188,12 @@
       "bases:新建数据库": false
     }
   },
-  "active": "ce13e10e1c514858",
+  "active": "b134e0f945324164",
   "lastOpenFiles": [
-    "一些生存技巧/魔法.md",
-    "一些生存技巧/课题组计算节点代理方法.md",
+    "img/Pasted image 20261028023844.png",
     "基础知识整理/IT.md",
+    "一些生存技巧/课题组计算节点代理方法.md",
+    "一些生存技巧/魔法.md",
     "Paper-Reading/MIG.md",
     "NEST/开题资料/毕设开题报告-詹咏庭-final.docx",
     "NEST/开题资料/2023312412-詹咏庭-多轮大语言模型智能体中步骤-词元级优势的嵌套估计.pdf",
@@ -235,7 +236,6 @@
     "Paper-Reading/TAPO.md",
     "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
     "Paper-Reading/ReAct.md",
-    "Paper-Reading/POAD.md",
     "未命名.canvas"
   ]
 }
