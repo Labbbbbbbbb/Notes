@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "一些生存技巧/课题组计算节点代理方法.md",
+                "file": "基础知识整理/IT.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "课题组计算节点代理方法"
+              "title": "IT"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "一些生存技巧/课题组计算节点代理方法.md",
+                "file": "基础知识整理/IT.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,9 +190,12 @@
   },
   "active": "b134e0f945324164",
   "lastOpenFiles": [
+    "img/Pasted image 20261028153124.png",
+    "NEST/代码笔记.md",
+    "NEST/idea.md",
+    "一些生存技巧/课题组计算节点代理方法.md",
     "img/Pasted image 20261028023844.png",
     "基础知识整理/IT.md",
-    "一些生存技巧/课题组计算节点代理方法.md",
     "一些生存技巧/魔法.md",
     "Paper-Reading/MIG.md",
     "NEST/开题资料/毕设开题报告-詹咏庭-final.docx",
@@ -204,7 +207,6 @@
     "NEST/开题资料/msoDA08.tmp",
     "NEST/开题资料/~WRL2886.tmp",
     "NEST/开题资料/~WRD2870.tmp",
-    "Paper-Reading/idea.md",
     "NEST/开题资料/~$开题报告-詹咏庭-v2.0.docx",
     "Pasted image 20261022001106.png",
     "img/Pasted image 20261022000455.png",
@@ -217,7 +219,6 @@
     "img/Pasted image 20261018133636.png",
     "img/Pasted image 20261017230852.png",
     "img/Pasted image 20261017225732.png",
-    "img/Pasted image 20261018161905.png",
     "Paper-Reading/FuNs.md",
     "Paper-Reading/DAPO.md",
     "Paper-Reading/CREST.md",
@@ -235,7 +236,6 @@
     "Paper-Reading/TEMPO.md",
     "Paper-Reading/TAPO.md",
     "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
-    "Paper-Reading/ReAct.md",
     "未命名.canvas"
   ]
 }
