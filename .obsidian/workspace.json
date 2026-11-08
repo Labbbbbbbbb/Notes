@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "一些生存技巧/课题组计算节点代理方法.md",
+                "file": "NEST/BRANCH-TAPO代码笔记.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "课题组计算节点代理方法"
+              "title": "BRANCH-TAPO代码笔记"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "一些生存技巧/课题组计算节点代理方法.md",
+                "file": "NEST/BRANCH-TAPO代码笔记.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,31 +190,43 @@
   },
   "active": "ce13e10e1c514858",
   "lastOpenFiles": [
+    "NEST/BRANCH-GiGPO训练调参&debug笔记.md",
+    "NEST/BRANCH-TAPO代码笔记.md",
+    "NEST/BRANCH-TAPO训练调参&debug笔记.md",
+    "NEST/BRANCH-GiGPO代码笔记.md",
+    "NEST/BRANCH-GiGPO训练指标一览.md",
+    "NEST/训练日志.md",
+    "Paper-Reading/TAPO.md",
+    "Paper-Reading/TPPO.md",
+    "基础知识整理/八股学习进程.md",
+    "基础知识整理/实验trick记录.md",
     "基础知识整理/IT.md",
-    "img/Pasted image 20261028153124.png",
-    "NEST/代码笔记.md",
-    "NEST/idea.md",
     "一些生存技巧/课题组计算节点代理方法.md",
-    "img/Pasted image 20261028023844.png",
+    "一些生存技巧/Codex reconnecting问题.md",
     "一些生存技巧/魔法.md",
+    "NEST/idea.md",
+    "data/home/zdhs0200/NEST/scripts/train_gigpo.sh.md",
+    "data/home/zdhs0200/NEST/scripts",
+    "data/home/zdhs0200/NEST",
+    "data/home/zdhs0200",
+    "data/home",
+    "data",
+    "NEST/开题资料/未命名.md",
+    "NEST/NEST-思路整理.md",
+    "img/Pasted image 20261028153124.png",
+    "img/Pasted image 20261028023844.png",
     "Paper-Reading/MIG.md",
     "NEST/开题资料/毕设开题报告-詹咏庭-final.docx",
     "NEST/开题资料/2023312412-詹咏庭-多轮大语言模型智能体中步骤-词元级优势的嵌套估计.pdf",
     "NEST/开题资料/~WRL2809.tmp",
     "NEST/开题资料/~WRD2801.tmp",
     "NEST/开题资料/~WRD2797.tmp",
-    "NEST/开题资料/msoE12D.tmp",
-    "NEST/开题资料/msoDA08.tmp",
-    "NEST/开题资料/~WRL2886.tmp",
-    "NEST/开题资料/~WRD2870.tmp",
-    "NEST/开题资料/~$开题报告-詹咏庭-v2.0.docx",
     "Pasted image 20261022001106.png",
     "img/Pasted image 20261022000455.png",
     "img/Pasted image 20261021121657.png",
     "Paper-Reading/GiGPO.md",
     "img/Pasted image 20261021122630.png",
     "img/Pasted image 20261021122615.png",
-    "NEST/NEST-思路整理.md",
     "img/Pasted image 20261018133734.png",
     "img/Pasted image 20261018133636.png",
     "img/Pasted image 20261017230852.png",
@@ -224,17 +236,6 @@
     "Paper-Reading/Symbolic Planning.md",
     "Paper-Reading/ALFWorld.md",
     "Paper-Reading/ArCHer.md",
-    "Paper-Reading/CoLA.md",
-    "Paper-Reading/COCONUT.md",
-    "Paper-Reading/iStar.md",
-    "Paper-Reading/OPD.md",
-    "Paper-Reading/AGENTIC REINFORCED POLICY OPTIMIZATION.md",
-    "Paper-Reading/TPPO.md",
-    "Paper-Reading/QAE.md",
-    "Paper-Reading/TodoList.md",
-    "Paper-Reading/TEMPO.md",
-    "Paper-Reading/TAPO.md",
-    "Paper-Reading/RLVR with the Relative  Surprisal Index.md",
     "未命名.canvas"
   ]
 }
