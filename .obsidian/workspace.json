@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "NEST/BRANCH-TAPO代码笔记.md",
+                "file": "NEST/BRANCH-GiGPO训练调参&debug笔记.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "BRANCH-TAPO代码笔记"
+              "title": "BRANCH-GiGPO训练调参&debug笔记"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "NEST/BRANCH-TAPO代码笔记.md",
+                "file": "NEST/BRANCH-GiGPO训练调参&debug笔记.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,19 +190,21 @@
   },
   "active": "ce13e10e1c514858",
   "lastOpenFiles": [
-    "img/Pasted image 20261030133626.png",
-    "NEST/BRANCH-GiGPO训练调参&debug笔记.md",
-    "NEST/BRANCH-TAPO代码笔记.md",
-    "NEST/BRANCH-TAPO训练调参&debug笔记.md",
+    "overview.png",
+    "validation_tasks.png",
     "NEST/BRANCH-GiGPO代码笔记.md",
-    "NEST/BRANCH-GiGPO训练指标一览.md",
     "NEST/训练日志.md",
+    "一些生存技巧/课题组计算节点代理方法.md",
+    "NEST/BRANCH-GiGPO训练调参&debug笔记.md",
+    "NEST/BRANCH-GiGPO训练指标一览.md",
+    "NEST/BRANCH-TAPO代码笔记.md",
+    "img/Pasted image 20261030133626.png",
+    "NEST/BRANCH-TAPO训练调参&debug笔记.md",
     "Paper-Reading/TAPO.md",
     "Paper-Reading/TPPO.md",
     "基础知识整理/八股学习进程.md",
     "基础知识整理/实验trick记录.md",
     "基础知识整理/IT.md",
-    "一些生存技巧/课题组计算节点代理方法.md",
     "一些生存技巧/Codex reconnecting问题.md",
     "一些生存技巧/魔法.md",
     "NEST/idea.md",
@@ -229,8 +231,6 @@
     "img/Pasted image 20261021122630.png",
     "img/Pasted image 20261021122615.png",
     "img/Pasted image 20261018133734.png",
-    "img/Pasted image 20261018133636.png",
-    "img/Pasted image 20261017230852.png",
     "Paper-Reading/FuNs.md",
     "Paper-Reading/DAPO.md",
     "Paper-Reading/CREST.md",

@@ -66,6 +66,33 @@ optimizer 更新次数 = ceil(展开后的样本数 / 256)  #（整除）
 |1280|5|
 |1600|7|
 
+# 训练结果保存
+```
+bash scripts/train_gigpo.sh alfworld trainer.save_freq=25
+```
+这个参数是checkpoint保存频率，这样每 25 step 保存一次，并在最后一步保存。按当前项目名和实验名，路径为：
+```
+/data/home/zdhs0200/NEST/checkpoints/nest/gigpo_alfworld/
+└── global_step_150/
+    ├── actor/     # 训练后的 LLM checkpoint
+    └── data.pt   # 数据加载器状态
+```
+注意，`actor/` 默认保存的是 **FSDP 分片 checkpoint**，用于恢复训练；它不一定直接就是可用 `from_pretrained()` 加载的完整 Hugging Face 模型，部署前还需要导出或合并。
+
+训练指标查看：
+后续训练可能会放在tensorboard上
+服务器保存训练日志：NEST/outputs/tensorboard/gigpo_环境_时间_作业号/
+查看时：
+  1. 在服务器终端启动：
+```
+     tensorboard --logdir /data/home/zdhs0200/NEST/outputs/tensorboard \
+       --host 127.0.0.1 --port 6006
+```
+2. 在 VS Code 下方的 **“端口 / Ports”** 面板，点击“转发端口”，输入 `6006`。
+3. 点击该行的 🌐 图标，或把“转发的地址”复制到本机浏览器打开。
+
+如果 VS Code 显示的本地端口是其他数字，例如 `6007`，就打开 `http://localhost:6007`。
+这里能打开，是因为 VS Code 把本机这个端口的请求转发到了服务器的 TensorBoard。
 
 # 主要报错以及对应原因
 ## CUDA OOM
@@ -108,4 +135,10 @@ Total Usage:
 
 
 # 训练日志
-1. zyt115200-harbin-institute-of-technology/nest/3l5dyfr7  GiGPO，Qwen2.5-1.5B-Instruct第一版完整训练
+1. zyt115200-harbin-institute-of-technology/nest/3l5dyfr7  GiGPO，Qwen2.5-1.5B-Instruct第一版完整训练。详细数据可以看服务器上面的wandb/run-20261108_195810-3l5dyfr7文件夹的config文件
+（wandb抽风登不上去了，只能用存在服务器的数据画了图）
+![[overview.png]]
+
+![[validation_tasks.png]]
+
+
